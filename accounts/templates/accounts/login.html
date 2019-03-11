@@ -12,8 +12,11 @@
             You can login here
             <button type="button" class="btn btn-success" name="button">Login</button>
         </div>
-        <div class="jumbotron">
-            <h1>Welcome !</h1>
-        </div>
+        <h1>{{name}}</h1>
+        <ul>
+            {% for number in numbers %}
+            <li>{{number}}</li>
+            {% endfor %}
+        </ul>
     </body>
 </html>
