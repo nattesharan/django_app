@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from django.contrib.auth.forms import UserCreationForm
+from accounts.forms import RegistrationForm
 from django.contrib.auth import logout
 # Create your views here.
 def home(request):
@@ -14,7 +14,7 @@ def home(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect(reverse('home'))
@@ -23,7 +23,7 @@ def register(request):
         }
         return render(request, 'accounts/register.html',context)
     else:
-        form = UserCreationForm()
+        form = RegistrationForm()
         context = {
             'form': form
         }
