@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, reverse
-from accounts.forms import RegistrationForm
+from accounts.forms import RegistrationForm, EditProfileForm
 from django.contrib.auth import logout
-from django.contrib.auth.forms import UserChangeForm
 # Create your views here.
 def home(request):
     numbers = [1,2,3,4,5]
@@ -42,12 +41,11 @@ def view_profile(request):
 
 def edit_profile(request):
     if request.method == 'POST':
-        form = UserChangeForm(request.POST, instance = request.user)
+        form = EditProfileForm(request.POST, instance = request.user)
         if form.is_valid():
             form.save()
             return redirect(reverse('view_profile'))
         form = form
     else:
-        form = UserChangeForm(instance = request.user)
+        form = EditProfileForm(instance = request.user)
     return render(request, 'accounts/edit_profile.html', {'form': form})
-    
