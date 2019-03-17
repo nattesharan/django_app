@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from accounts.forms import RegistrationForm, EditProfileForm
 from django.contrib.auth import logout
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 # Create your views here.
 def home(request):
     numbers = [1,2,3,4,5]
@@ -55,6 +56,8 @@ def change_password(request):
         form = PasswordChangeForm(data=request.POST, user=request.user)
         if form.is_valid():
             form.save()
+            # if we dont add this the usr will be logged out after changing password
+            update_session_auth_hash(request, form.user)
             return redirect(reverse('view_profile'))
         form = form
     else:
