@@ -4,7 +4,6 @@ from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
-@login_required
 def home(request):
     numbers = [1,2,3,4,5]
     name = "Sharan"
@@ -37,7 +36,7 @@ def logout_user(request):
     logout(request)
     return redirect(reverse('main'))
 
-@login_required
+
 def view_profile(request):
     context = {
         'user': request.user
