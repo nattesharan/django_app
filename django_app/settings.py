@@ -127,7 +127,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/account/'
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
 
 DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',
