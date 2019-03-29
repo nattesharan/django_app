@@ -130,6 +130,11 @@ STATIC_URL = '/static/'
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/account/'
 
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 25
+# EMAIL_HOST_USER = 'example@gmail.com'
+# EMAIL_HOST_PASSWORD = 'app_password'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 
