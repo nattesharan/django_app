@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from accounts.forms import RegistrationForm, EditProfileForm
-from django.contrib.auth import logout
+from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
 # Create your views here.
 def home(request):
     numbers = [1,2,3,4,5]
