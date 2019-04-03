@@ -21,7 +21,7 @@ from . import views
 urlpatterns = [
     url(r'^$', views.main, name="main"),
     url(r'^admin/', admin.site.urls),
-    url(r'^account/', include('accounts.urls'))
+    url(r'^account/', include('accounts.urls', namespace='accounts'))
 ]
 
 if settings.DEBUG:

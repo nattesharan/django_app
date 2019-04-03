@@ -19,7 +19,7 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect(reverse('home'))
+            return redirect(reverse('accounts:home'))
         context = {
             'form': form
         }
@@ -49,7 +49,7 @@ def edit_profile(request):
         form = EditProfileForm(request.POST, instance = request.user)
         if form.is_valid():
             form.save()
-            return redirect(reverse('view_profile'))
+            return redirect(reverse('accounts:view_profile'))
     else:
         form = EditProfileForm(instance = request.user)
     return render(request, 'accounts/edit_profile.html', {'form': form})
@@ -62,7 +62,7 @@ def change_password(request):
             form.save()
             # if we dont add this the usr will be logged out after changing password
             update_session_auth_hash(request, form.user)
-            return redirect(reverse('view_profile'))
+            return redirect(reverse('accounts:view_profile'))
         form = form
     else:
         form = PasswordChangeForm(user=request.user)
