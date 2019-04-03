@@ -10,6 +10,7 @@ class UserProfile(models.Model):
     city = models.CharField(max_length = 32,default='')
     website = models.URLField(default='')
     phone = models.CharField(max_length=10, validators=[MinLengthValidator(10)])
+    image = models.ImageField(upload_to='profile_images', blank=True)
 
     def __str__(self):
         return self.user.username
