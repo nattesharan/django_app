@@ -9,5 +9,6 @@ class UserProfileAdmin(admin.ModelAdmin):
 
     def user_info(self, instance):
         return instance.description
-
+    
+    user_info.short_description = 'Description'
 admin.site.register(models.UserProfile, UserProfileAdmin)
