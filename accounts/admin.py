@@ -5,6 +5,9 @@ from . import models
 # admin.site.site_header = 'My Administration'
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone')
+    list_display = ('user', 'phone', 'user_info', 'website')
+
+    def user_info(self, instance):
+        return instance.description
 
 admin.site.register(models.UserProfile, UserProfileAdmin)
