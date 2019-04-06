@@ -21,7 +21,8 @@ from . import views
 urlpatterns = [
     url(r'^$', views.main, name="main"),
     url(r'^admin/', admin.site.urls),
-    url(r'^account/', include('accounts.urls', namespace='accounts'))
+    url(r'^account/', include('accounts.urls', namespace='accounts')),
+    url(r'^home/', include('home.urls', namespace='home'))
 ] + static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
