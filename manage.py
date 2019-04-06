@@ -20,3 +20,9 @@ if __name__ == "__main__":
             )
         raise
     execute_from_command_line(sys.argv)
+
+# we can run the server with pyhton manage.py runserver
+# we can also use ./manage.py runserver
+# we can also use python -m django runserver but for this we need to have ENV variabale set
+# we can also use django-admin runserver but for this we need to have ENV variabale set
+# export DJANGO_SETTINGS_MODULE=django_app.settings and also export the python path export PYTHONPATH=.
