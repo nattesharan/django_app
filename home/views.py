@@ -15,6 +15,8 @@ class HomeView(TemplateView):
     def post(self, request):
         form = HomeForm(request.POST)
         if form.is_valid():
-            post = form.cleaned_data['post']
+            post = form.save(commit=False)
+            post.user = request.user
+            post.save()
             return redirect('home:home')
         return render(request, self.template_name, {'form': form})
