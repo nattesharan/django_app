@@ -11,6 +11,9 @@ class HomeView(TemplateView):
 
     def get(self, request):
         form = HomeForm()
+        # sessions are also usually cookies but they arent stored in the client side
+        # they are more secure than cookies
+        # likewise cookies they too have expiry time
         if 'username' not in request.session:
             request.session['username'] = request.user.username
         response = render(request, self.template_name, {'form': form})
