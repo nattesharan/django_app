@@ -41,6 +41,9 @@ def view_profile(request):
     context = {
         'user': request.user
     }
+    if request.session.test_cookie_worked():
+        print("The test cookie worked!!!")
+        request.session.delete_test_cookie()
     return render(request, 'accounts/profile.html', context=context)
 
 @login_required

@@ -10,6 +10,7 @@ class HomeView(TemplateView):
 
     def get(self, request):
         form = HomeForm()
+        request.session.set_test_cookie()
         return render(request, self.template_name, {'form': form})
     
     def post(self, request):
