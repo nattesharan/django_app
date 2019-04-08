@@ -12,6 +12,8 @@
     <p>Phone: {{ user.profile.phone }}</p>
     <p>City: {{ user.profile.city }}</p>
     <p>Website: {{ user.profile.website }}</p>
+    <p>Total Visits: {{ visits }}</p>
+    <p>Last Visit: {{ last_visit }}</p>
     <img src="{{ user.profile.image.url }}" width="240">
 </div>
 {% endblock  %}

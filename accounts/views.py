@@ -3,6 +3,7 @@ from accounts.forms import RegistrationForm, EditProfileForm
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
+import datetime
 # Create your views here.
 def home(request):
     numbers = [1,2,3,4,5]
@@ -39,11 +40,13 @@ def logout_user(request):
 
 def view_profile(request):
     context = {
-        'user': request.user
+        'user': request.user,
+        'last_visit': request.COOKIES.get('last_visit', datetime.datetime.utcnow()),
+        'visits': request.COOKIES.get('visits', 0)
     }
-    if request.session.test_cookie_worked():
-        print("The test cookie worked!!!")
-        request.session.delete_test_cookie()
+    # if request.session.test_cookie_worked():
+    #     print("The test cookie worked!!!")
+    #     request.session.delete_test_cookie()
     return render(request, 'accounts/profile.html', context=context)
 
 @login_required
