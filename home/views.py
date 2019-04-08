@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
+from home.models import Post
 from home.forms import HomeForm
 import datetime
 # Create your views here.
@@ -11,6 +12,7 @@ class HomeView(TemplateView):
 
     def get(self, request):
         form = HomeForm()
+        posts = Post.objects.all().order_by('-created_on')
         # sessions are also usually cookies but they arent stored in the client side they are stored in the server database
         # they are more secure than cookies
         # likewise cookies they too have expiry time
@@ -18,7 +20,7 @@ class HomeView(TemplateView):
         # Default: 1209600 (2 weeks, in seconds)
         if 'username' not in request.session:
             request.session['username'] = request.user.username
-        response = render(request, self.template_name, {'form': form})
+        response = render(request, self.template_name, {'form': form, 'posts': posts})
         # by default cookie expiry time is 1 year
         # request.session.set_test_cookie()
         # Expires sets an expiry date for when a cookie gets deleted

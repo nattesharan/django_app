@@ -11,7 +11,10 @@
         {{ form.as_p }}
         <button type="submit" class="btn btn-success">Post</button>
     </form>
-    <h3>{{post}}</h3>
+    {% for post in posts %}
+        <h3>{{ post.post }}</h3>
+        <p>Posted by {{ post.user.get_full_name}} on {{ post.created_on }}</p>
+    {% endfor %}
     </div
 </div>
 {% endblock  %}
