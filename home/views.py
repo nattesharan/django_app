@@ -11,6 +11,8 @@ class HomeView(TemplateView):
 
     def get(self, request):
         form = HomeForm()
+        if 'username' not in request.session:
+            request.session['username'] = request.user.username
         response = render(request, self.template_name, {'form': form})
         # by default cookie expiry time is 1 year
         # request.session.set_test_cookie()
