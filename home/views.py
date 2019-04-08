@@ -12,7 +12,12 @@ class HomeView(TemplateView):
     def get(self, request):
         form = HomeForm()
         response = render(request, self.template_name, {'form': form})
+        # by default cookie expiry time is 1 year
         # request.session.set_test_cookie()
+        # Expires sets an expiry date for when a cookie gets deleted
+        # response.set_cookie('last_visit',datetime.datetime.utcnow(),max_age=30) in int is seconds
+        # Max-age sets the time in seconds for when a cookie will be deleted (use this, it’s no longer 2009)
+        # response.set_cookie('last_visit',datetime.datetime.utcnow(),expires=datetime) specify datetime of when to expire
         visits = int(request.COOKIES.get('visits', 0))
         if 'last_visit' in request.COOKIES:
             last_visit = datetime.datetime.strptime(request.COOKIES['last_visit'][:-7],'%Y-%m-%d %H:%M:%S')
