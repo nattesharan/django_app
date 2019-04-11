@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from accounts.forms import RegistrationForm, EditProfileForm
 from django.contrib.auth import logout, update_session_auth_hash
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 import datetime
@@ -38,12 +39,17 @@ def logout_user(request):
     return redirect(reverse('main'))
 
 
-def view_profile(request):
-    context = {
-        'user': request.user,
-        'last_visit': request.COOKIES.get('last_visit', datetime.datetime.utcnow()),
-        'visits': request.COOKIES.get('visits', 0)
-    }
+def view_profile(request, pk=None):
+    if pk:
+        context = {
+            'user': User.objects.get(pk=pk)
+        }
+    else:
+        context = {
+            'user': request.user,
+            'last_visit': request.COOKIES.get('last_visit', datetime.datetime.utcnow()),
+            'visits': request.COOKIES.get('visits', 0)
+        }
     # print(request.session.get('username','Not found'))
     # if request.session.test_cookie_worked():
     #     print("The test cookie worked!!!")
