@@ -4,19 +4,29 @@
 {% endblock  %}
 {% block body %}
 <div class="container">
-    <h1>Home</h1>
+    <div class="col-md-8">
+        <h1>Home</h1>
+        <div>
+        <form method='post'>
+            {% csrf_token %}
+            {% comment %} {{ form.as_p }} {% endcomment %}
+            {{ form.post }}
+            <br>
+            <button type="submit" class="btn btn-success">Post</button>
+        </form>
+        {% for post in posts %}
+            <h3>{{ post.post }}</h3>
+            <p>Posted by {{ post.user.get_full_name}} on {{ post.created_on }}</p>
+        {% endfor %}
+        </div>
+    </div>
     <div>
-    <form method='post'>
-        {% csrf_token %}
-        {% comment %} {{ form.as_p }} {% endcomment %}
-        {{ form.post }}
-        <br>
-        <button type="submit" class="btn btn-success">Post</button>
-    </form>
-    {% for post in posts %}
-        <h3>{{ post.post }}</h3>
-        <p>Posted by {{ post.user.get_full_name}} on {{ post.created_on }}</p>
-    {% endfor %}
-    </div
+        <h2>Other Users</h2>
+        {% for other_user in users %}
+            <a href="{% url 'accounts:view_profile' %}">
+                <h3>{{ other_user.username }}</h3>
+            </a>
+        {% endfor %}
+    </div>
 </div>
 {% endblock  %}

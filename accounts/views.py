@@ -44,7 +44,7 @@ def view_profile(request):
         'last_visit': request.COOKIES.get('last_visit', datetime.datetime.utcnow()),
         'visits': request.COOKIES.get('visits', 0)
     }
-    print(request.session.get('username','Not found'))
+    # print(request.session.get('username','Not found'))
     # if request.session.test_cookie_worked():
     #     print("The test cookie worked!!!")
     #     request.session.delete_test_cookie()
