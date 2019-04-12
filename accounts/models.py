@@ -15,6 +15,7 @@ class UserProfile(models.Model):
     website = models.URLField(default='')
     phone = models.CharField(max_length=10, validators=[MinLengthValidator(10)])
     image = models.ImageField(upload_to='profile_images', blank=True)
+    friends = models.ManyToManyField(User, related_name='friends')
     objects = models.Manager()
     super_user_profile = UserProfileManager()
     def __str__(self):

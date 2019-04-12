@@ -14,7 +14,8 @@ class HomeView(TemplateView):
     def get(self, request):
         form = HomeForm()
         posts = Post.objects.all().order_by('-created_on')
-        users = User.objects.all()
+        # users = User.objects.all()
+        users = User.objects.exclude(pk=request.user.pk)
         # sessions are also usually cookies but they arent stored in the client side they are stored in the server database
         # they are more secure than cookies
         # likewise cookies they too have expiry time
