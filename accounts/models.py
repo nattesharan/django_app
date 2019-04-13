@@ -20,7 +20,12 @@ class UserProfile(models.Model):
     super_user_profile = UserProfileManager()
     def __str__(self):
         return self.user.username
-        
+    
+    @classmethod
+    def add_friend(cls, user, friend):
+        user_profile = cls.objects.get(user=user)
+        user_profile.friends.add(friend)
+
 def create_profile(sender, **kwargs):
     if kwargs['created']:
         user_profile = UserProfile.objects.create(user=kwargs['instance'])
