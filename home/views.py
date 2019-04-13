@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
 from home.models import Post
+from accounts.models import UserProfile
 from home.forms import HomeForm
 import datetime
 # Create your views here.
@@ -16,6 +17,7 @@ class HomeView(TemplateView):
         posts = Post.objects.all().order_by('-created_on')
         # users = User.objects.all()
         users = User.objects.exclude(pk=request.user.pk)
+        friends = request.user.profile.friends.all()
         # sessions are also usually cookies but they arent stored in the client side they are stored in the server database
         # they are more secure than cookies
         # likewise cookies they too have expiry time
@@ -23,7 +25,7 @@ class HomeView(TemplateView):
         # Default: 1209600 (2 weeks, in seconds)
         if 'username' not in request.session:
             request.session['username'] = request.user.username
-        response = render(request, self.template_name, {'form': form, 'posts': posts, 'users': users})
+        response = render(request, self.template_name, {'form': form, 'posts': posts, 'users': users, 'friends': friends})
         # by default cookie expiry time is 1 year
         # request.session.set_test_cookie()
         # Expires sets an expiry date for when a cookie gets deleted
@@ -49,3 +51,12 @@ class HomeView(TemplateView):
             post.save()
             return redirect('home:home')
         return render(request, self.template_name, {'form': form})
+
+def connect_friends(request, action, pk):
+    user = request.user
+    friend_user = User.objects.get(pk=pk)
+    if action == 'friend':
+        UserProfile.add_friend(user, friend_user)
+    else:
+        UserProfile.remove_friend(user, friend_user)
+    return redirect('home:home')

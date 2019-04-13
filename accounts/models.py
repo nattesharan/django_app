@@ -25,6 +25,11 @@ class UserProfile(models.Model):
     def add_friend(cls, user, friend):
         user_profile = cls.objects.get(user=user)
         user_profile.friends.add(friend)
+    
+    @classmethod
+    def remove_friend(cls, user, friend):
+        user_profile = cls.objects.get(user=user)
+        user_profile.friends.remove(friend)
 
 def create_profile(sender, **kwargs):
     if kwargs['created']:
