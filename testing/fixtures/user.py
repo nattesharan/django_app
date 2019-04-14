@@ -2,5 +2,8 @@ from django.contrib.auth.models import User
 import pytest
 
 @pytest.fixture
-def user(request):
-    pass
+def new_user(request):
+    user = User(email='test@test.com', username='test')
+    user.set_password('test1231234')
+    user.save()
+    return user
