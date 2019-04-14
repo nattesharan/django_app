@@ -29,3 +29,6 @@ if __name__ == "__main__":
 # we can also use python -m django runserver but for this we need to have ENV variabale set
 # we can also use django-admin runserver but for this we need to have ENV variabale set
 # export DJANGO_SETTINGS_MODULE=django_app.settings and also export the python path export PYTHONPATH=. or source the env.sh file
+
+
+#pytest --reuse-db --cov --nomigrations
