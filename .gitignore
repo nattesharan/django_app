@@ -1,6 +1,7 @@
 venv/
 *.pyc
 .idea
+coverage_report
 .vscode/
 static/
 profile_images/

@@ -1,0 +1,4 @@
+[run]
+omit = venv/*
+include = testing/*
+data_file = coverage_report
