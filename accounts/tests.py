@@ -18,3 +18,4 @@ class UserTest(TestCase):
     def test_client(self):
         response = self.client.get(reverse('accounts:login'))
         self.assertTrue(response.status_code == 200, 'It works')
+# --keepdb in test will not drop the db check https://django-testing-docs.readthedocs.io/en/latest/views.html for more info
