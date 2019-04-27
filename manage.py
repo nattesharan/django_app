@@ -32,3 +32,5 @@ if __name__ == "__main__":
 
 
 #pytest --reuse-db --cov --nomigrations
+
+# python -m smtpd -n -c DebuggingServer localhost:1025

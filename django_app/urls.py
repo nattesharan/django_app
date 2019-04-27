@@ -16,14 +16,17 @@ Including another URLconf
 from django.conf.urls import url, include, static
 from django.contrib import admin
 from django.conf import settings
+from rest_framework_swagger.views import get_swagger_view
 from . import views
+schema_view = get_swagger_view(title='API')
 
 urlpatterns = [
     url(r'^$', views.main, name="main"),
     url(r'^admin/', admin.site.urls),
     url(r'^account/', include('accounts.urls', namespace='accounts')),
     url(r'^home/', include('home.urls', namespace='home')),
-    url(r'^api/v1/', include('api.urls', namespace='api'))
+    url(r'^api/v1/', include('api.urls', namespace='api')),
+    url(r'^api/docs/', schema_view)
 ] + static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
