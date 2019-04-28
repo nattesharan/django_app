@@ -9,10 +9,53 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from rest_framework import generics, mixins
+
 # we use view sets when we want a view or we want all the crud to be implemented without any other operations
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+# we can also use generics and mixins for creting apis its combination of ViewSet and APIView
+# Save and deletion hooks:
+
+# The following methods are provided by the mixin classes, and provide easy overriding of the object save or deletion behavior.
+
+# perform_create(self, serializer) - Called by CreateModelMixin when saving a new object instance.
+# perform_update(self, serializer) - Called by UpdateModelMixin when saving an existing object instance.
+# perform_destroy(self, instance) - Called by DestroyModelMixin when deleting an object instance.
+class PostsGenericView(generics.GenericAPIView, 
+                        mixins.ListModelMixin, 
+                        mixins.CreateModelMixin,
+                        mixins.UpdateModelMixin,
+                        mixins.RetrieveModelMixin,
+                        mixins.DestroyModelMixin):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    # if we dont want pk as url parameter we can add a lookup field
+    # lookup_field = 'id'
+    # if we want to use some other field for querying like slugs
+
+    def get(self, request, pk=None):
+        if pk:
+            return self.retrieve(request)
+        return self.list(request)
+    
+    def post(self, request, pk=None):
+        return self.create(request)
+    
+    def perform_create(self, serializer):
+        serializer.save(user=User.objects.get(pk=2))
+    
+    def put(self, request, pk):
+        return self.update(request)
+    
+    def perform_update(self, serializer):
+        serializer.save(user=User.objects.get(pk=2))
+
+    def delete(self, request, pk):
+        return self.destroy(request)
+
 
 class PostsApiView(APIView):
     # the main advantage of using class over functional view is no need to worry about parsing !!!! Hurrayyyyy !!! 
