@@ -8,7 +8,6 @@ from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
 from rest_framework import generics, mixins
 
 # we use view sets when we want a view or we want all the crud to be implemented without any other operations

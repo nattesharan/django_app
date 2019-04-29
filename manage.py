@@ -34,3 +34,15 @@ if __name__ == "__main__":
 #pytest --reuse-db --cov --nomigrations
 
 # python -m smtpd -n -c DebuggingServer localhost:1025
+
+# Permissions
+# Assigning permissions to a user grants the user access to do what is described by those permissions. 
+# When you create a user, that user has no permissions, and it’s up to you to give the user specific permissions. 
+# For example, you can give a user permission to add and change publishers, but not permission to delete them.
+# by default when we add a model it creates 3 permissions add, change and delete
+# we can also use groups to group multiple permissions
+# we check is a user has permission using obj.has_perm('perm') where perm is permission name (here the obj may be group or user)
+# like 'app_name.action_model'
+# we can alsoadd our own permissions in the model it is a tuple of tuples and then run migration
+# if we want to use group we can add permissons to a group and add that group to user
+# we can create a manage.py command for populationg the default groups
