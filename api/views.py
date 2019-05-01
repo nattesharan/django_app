@@ -46,7 +46,7 @@ class PostsGenericView(generics.GenericAPIView,
                         mixins.DestroyModelMixin):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication, JWTAuthentication)
     permission_classes = (IsAuthenticated,)
     # if we dont want pk as url parameter we can add a lookup field
     # lookup_field = 'id'
@@ -172,7 +172,7 @@ class LoginApiView(APIView):
 
 
 class LogoutApiView(APIView):
-    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication, JWTAuthentication)
     permission_classes = (IsAuthenticated,)
     def post(self, request):
         request.user.auth_token.delete()
@@ -181,3 +181,4 @@ class LogoutApiView(APIView):
 # In headers
 #Authorization Token 6bece4f19c201a92bd54c2ac738ceaa3a9c04cb0
 # X-CSRFToken 8o8Pg86esDvh5vd7v9Pa0i57aJQHGZqaDMejTFfaL2FUj2JckHTrnxLLyNKasB8q
+# Authorization Bearer 6bece4f19c201a92bd54c2ac738ceaa3a9c04cb0
