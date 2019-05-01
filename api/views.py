@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, mixins
 # import the login schemes
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication
 from rest_framework.decorators import authentication_classes, permission_classes
 # auth classess have no affect without permission classess
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -24,7 +24,7 @@ from rest_framework.authtoken.models import Token
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser)
 
 
@@ -44,7 +44,7 @@ class PostsGenericView(generics.GenericAPIView,
                         mixins.DestroyModelMixin):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
     # if we dont want pk as url parameter we can add a lookup field
     # lookup_field = 'id'
@@ -170,9 +170,12 @@ class LoginApiView(APIView):
 
 
 class LogoutApiView(APIView):
-    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication)
     permission_classes = (IsAuthenticated,)
     def post(self, request):
         request.user.auth_token.delete()
         logout(request)
         return Response(status=204)
+# In headers
+#Authorization Token 6bece4f19c201a92bd54c2ac738ceaa3a9c04cb0
+# X-CSRFToken 8o8Pg86esDvh5vd7v9Pa0i57aJQHGZqaDMejTFfaL2FUj2JckHTrnxLLyNKasB8q
