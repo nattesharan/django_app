@@ -19,6 +19,7 @@ from rest_framework.authtoken.models import Token
 
 #import jwt authentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 
@@ -167,7 +168,8 @@ class LoginApiView(APIView):
         user = data.validated_data['user']
         login(request, user)
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        jwt = RefreshToken.for_user(user)
+        return Response({'token': token.key, 'access_token': str(jwt.access_token), 'refresh_token': str(jwt)})
 
 
 
@@ -179,6 +181,6 @@ class LogoutApiView(APIView):
         logout(request)
         return Response(status=204)
 # In headers
-#Authorization Token 6bece4f19c201a92bd54c2ac738ceaa3a9c04cb0
+# Authorization Token 6bece4f19c201a92bd54c2ac738ceaa3a9c04cb0
 # X-CSRFToken 8o8Pg86esDvh5vd7v9Pa0i57aJQHGZqaDMejTFfaL2FUj2JckHTrnxLLyNKasB8q
 # Authorization Bearer 6bece4f19c201a92bd54c2ac738ceaa3a9c04cb0
