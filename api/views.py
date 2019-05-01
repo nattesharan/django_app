@@ -9,11 +9,21 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, mixins
+# import the login schemes
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+# auth classess have no affect without permission classess
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+# session auth taskes the csrf token in request and validates
+
+
 
 # we use view sets when we want a view or we want all the crud to be implemented without any other operations
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+
 
 # we can also use generics and mixins for creting apis its combination of ViewSet and APIView
 # Save and deletion hooks:
@@ -31,6 +41,8 @@ class PostsGenericView(generics.GenericAPIView,
                         mixins.DestroyModelMixin):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
     # if we dont want pk as url parameter we can add a lookup field
     # lookup_field = 'id'
     # if we want to use some other field for querying like slugs
