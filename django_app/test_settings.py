@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,10 @@ LOGIN_EXEMPT_URLS = (
 # EMAIL_HOST_PASSWORD = 'app_password'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+    )
+}

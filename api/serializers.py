@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from home.models import Post
+from django.contrib.auth import authenticate
 
 
 '''
@@ -31,3 +32,27 @@ class PostSerializer(serializers.ModelSerializer):
             'user',
             'created_on'
         )
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        username = data.get('username',None)
+        password = data.get('password', None)
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user:
+                if user.is_active:
+                    data['user'] = user
+                    return data
+                else:
+                    msg = 'User not active.'
+                    raise serializers.ValidationError(msg)
+            else:
+                msg = 'Invalid credentials.'
+                raise serializers.ValidationError(msg)
+        else:
+            msg = "Username and password not found."
+            raise serializers.ValidationError(msg)

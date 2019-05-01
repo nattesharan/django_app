@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from django.contrib.auth.models import User
-from api.serializers import UserSerializer, PostSerializer
+from api.serializers import UserSerializer, PostSerializer, LoginSerializer
 from home.models import Post
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,9 +10,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, mixins
 # import the login schemes
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from rest_framework.decorators import authentication_classes, permission_classes
 # auth classess have no affect without permission classess
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from django.contrib.auth import login, logout
+from rest_framework.authtoken.models import Token
 # session auth taskes the csrf token in request and validates
 
 
@@ -21,7 +24,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser)
 
 
@@ -41,7 +44,7 @@ class PostsGenericView(generics.GenericAPIView,
                         mixins.DestroyModelMixin):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     # if we dont want pk as url parameter we can add a lookup field
     # lookup_field = 'id'
@@ -154,3 +157,22 @@ def post_detail(request, pk):
     elif request.method == 'DELETE':
         post.delete()
         return JsonResponse({'message': 'Successfully deleted the post !'}, status=204)
+
+class LoginApiView(APIView):
+    def post(self, request):
+        data = LoginSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+        user = data.validated_data['user']
+        login(request, user)
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
+
+
+
+class LogoutApiView(APIView):
+    authentication_classes = (TokenAuthentication, BasicAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    def post(self, request):
+        request.user.auth_token.delete()
+        logout(request)
+        return Response(status=204)
