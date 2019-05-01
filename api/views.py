@@ -70,13 +70,14 @@ class PostsGenericView(generics.GenericAPIView,
         return self.create(request)
     
     def perform_create(self, serializer):
-        serializer.save(user=User.objects.get(pk=2))
+        print("calleddddd")
+        serializer.save(user=self.request.user)
     
     def put(self, request, pk):
         return self.update(request)
     
     def perform_update(self, serializer):
-        serializer.save(user=User.objects.get(pk=2))
+        serializer.save(user=self.request.user)
 
     def delete(self, request, pk):
         return self.destroy(request)

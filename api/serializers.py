@@ -25,6 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 class PostSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.pk')
     class Meta:
         model = Post
         fields = (
