@@ -2,8 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from home.models import Post
 from django.contrib.auth import authenticate
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import Permission
-
 
 '''
 serializers.Serializer:
@@ -63,3 +63,24 @@ class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
         fields = '__all__'
+
+class AddPermissionSerializer(serializers.Serializer):
+    permissions = serializers.ListField(child = serializers.IntegerField())
+    user = serializers.IntegerField()
+    
+    def validate(self, attrs):
+        permissions = attrs.get('permissions',[])
+        user = attrs.get('user','')
+        if permissions and user:
+            try:
+                user = User.objects.get(pk=user)
+                if not user.is_superuser:
+                    permissions = Permission.objects.filter(pk__in=permissions)
+                    attrs['permissions']= permissions
+                    attrs['user']= user
+                    return attrs
+                raise serializers.ValidationError('User is already admin')
+            except ObjectDoesNotExist:
+                raise serializers.ValidationError('User not found')
+        raise serializers.ValidationError('Permissons and user required')
+

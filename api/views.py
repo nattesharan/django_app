@@ -1,6 +1,8 @@
+from api.utils import add_permissions
+
 from rest_framework import viewsets
 from django.contrib.auth.models import User, Permission
-from api.serializers import UserSerializer, PostSerializer, LoginSerializer, PermissionSerializer
+from api.serializers import UserSerializer, PostSerializer, LoginSerializer, PermissionSerializer, AddPermissionSerializer
 from home.models import Post
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
@@ -31,6 +33,21 @@ class AdminPermissionsView(APIView):
         serializer = PermissionSerializer(queryset, many=True)
         return Response(serializer.data)
 
+class AddPermissionView(APIView):
+    #this view is used to add permissions to user
+    authentication_classes = (BasicAuthentication,)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    def post(self, request):
+        # ser
+        data = AddPermissionSerializer(data=request.data)
+        data.is_valid(raise_exception=True)
+        permissions = data.validated_data['permissions']
+        user = data.validated_data['user']
+        # now call the add_permissions which will add all the permissions to the user and add a admin log entry
+        success = add_permissions(permissions, user, request.user)
+        if success:
+            return Response({'status': True, 'msg': 'Added permissions to user'})
+        return Response({'status': False,'msg': 'Error Occured'})
 # we use view sets when we want a view or we want all the crud to be implemented without any other operations
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
