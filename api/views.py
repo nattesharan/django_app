@@ -1,4 +1,4 @@
-from api.utils import add_permissions
+from api.utils import add_permissions, has_model_permissions
 
 from rest_framework import viewsets
 from django.contrib.auth.models import User, Permission
@@ -84,10 +84,11 @@ class PostsGenericView(generics.GenericAPIView,
         return self.list(request)
     
     def post(self, request, pk=None):
-        return self.create(request)
+        if has_model_permissions(request.user, ['add_post'], 'home'):
+            return self.create(request)
+        return Response({'msg': 'You dont have permission for this action'}, status=401)
     
     def perform_create(self, serializer):
-        print("calleddddd")
         serializer.save(user=self.request.user)
     
     def put(self, request, pk):
