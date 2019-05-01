@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from home.models import Post
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import Permission
 
 
 '''
@@ -56,3 +57,8 @@ class LoginSerializer(serializers.Serializer):
         else:
             msg = "Username and password not found."
             raise serializers.ValidationError(msg)
+
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = '__all__'

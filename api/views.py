@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from django.contrib.auth.models import User
-from api.serializers import UserSerializer, PostSerializer, LoginSerializer
+from django.contrib.auth.models import User, Permission
+from api.serializers import UserSerializer, PostSerializer, LoginSerializer, PermissionSerializer
 from home.models import Post
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
@@ -22,6 +22,14 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
+#adding a view for admin to give permissins to user
+class AdminPermissionsView(APIView):
+    authentication_classes = (BasicAuthentication,)
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    def get(self, request):
+        queryset = Permission.objects.all()
+        serializer = PermissionSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 # we use view sets when we want a view or we want all the crud to be implemented without any other operations
 class UserView(viewsets.ModelViewSet):
