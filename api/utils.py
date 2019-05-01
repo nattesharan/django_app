@@ -1,9 +1,17 @@
 from django.contrib.admin.models import LogEntry, ADDITION, ContentType
 
+# this function takes list of permissions and checks if the entity has the list of permissions
+def has_model_permissions( entity, perms, app):
+    for p in perms:
+        if not entity.has_perm( "%s.%s" % ( app, p) ):
+            return False
+        return True
+
+
 def add_permissions(permissions, user, admin_user):
     for permission in permissions:
         # if theres no permission for that user add it
-        if not user.has_perm(permission.codename):
+        if not has_model_permissions(user, [permission.codename], 'home'):
             user.user_permissions.add(permission)
             try:
                 LogEntry.objects.log_action(
