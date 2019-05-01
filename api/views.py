@@ -16,7 +16,9 @@ from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.contrib.auth import login, logout
 from rest_framework.authtoken.models import Token
-# session auth taskes the csrf token in request and validates
+
+#import jwt authentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 
@@ -24,7 +26,7 @@ from rest_framework.authtoken.models import Token
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    authentication_classes = (TokenAuthentication, BasicAuthentication)
+    authentication_classes = (TokenAuthentication, BasicAuthentication, JWTAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser)
 
 
