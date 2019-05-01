@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework import generics, mixins
 # import the login schemes
 from rest_framework.authentication import BasicAuthentication, TokenAuthentication
-from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 # auth classess have no affect without permission classess
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.contrib.auth import login, logout
@@ -151,7 +151,9 @@ class PostsApiView(APIView):
         return Response({'message': 'Successfully deleted the post !'}, status=204)
 
 
-@csrf_exempt
+@api_view(['POST','GET'])
+@authentication_classes((JWTAuthentication, BasicAuthentication, TokenAuthentication))
+@permission_classes((IsAuthenticated,))
 def posts(request):
     if request.method == 'GET':
         queryset = Post.objects.all()
@@ -162,11 +164,13 @@ def posts(request):
         data = parser.parse(request)
         post = PostSerializer(data=data)
         if post.is_valid():
-            post.save()
+            post.save(user=request.user)
             return JsonResponse(post.data, status=201)
         return JsonResponse(post.errors, status=400)
 
-@csrf_exempt
+@api_view(['GET','PUT','DELETE'])
+@authentication_classes((JWTAuthentication, TokenAuthentication, BasicAuthentication))
+@permission_classes((IsAuthenticated,))
 def post_detail(request, pk):
     try:
         # we cant use get_object_or_404 as ite returns 404 page as this is api we need to send a response
@@ -181,7 +185,7 @@ def post_detail(request, pk):
         data = parser.parse(request)
         post = PostSerializer(post, data=data)
         if post.is_valid():
-            post.save()
+            post.save(user=request.user)
             return JsonResponse(post.data)
         return JsonResponse(post.errors, status=400)
     elif request.method == 'DELETE':
