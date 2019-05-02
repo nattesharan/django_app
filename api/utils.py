@@ -1,5 +1,6 @@
 from django.contrib.admin.models import LogEntry, ADDITION, ContentType
-
+from functools import wraps
+from rest_framework.response import Response
 # this function takes list of permissions and checks if the entity has the list of permissions
 def has_model_permissions( entity, perms, app):
     for p in perms:
@@ -25,3 +26,14 @@ def add_permissions(permissions, user, admin_user):
             except Exception as E:
                 print(E)
     return True
+
+def check_permission(permission):
+    def decorator(view_func):
+        @wraps(view_func)
+        def decorated(request, *args, **kwargs):
+            app, perm = permission.split('.')
+            if has_model_permissions(request.user, [perm], app):
+                return view_func(request, *args, **kwargs)
+            return Response({'message': 'You dont have permission to do this'})
+        return decorated
+    return decorator

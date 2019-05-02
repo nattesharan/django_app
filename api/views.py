@@ -1,4 +1,4 @@
-from api.utils import add_permissions, has_model_permissions
+from api.utils import add_permissions, has_model_permissions, check_permission
 from api.permissionclasses import ListPermission
 
 from rest_framework import viewsets
@@ -23,6 +23,8 @@ from rest_framework.authtoken.models import Token
 #import jwt authentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import permission_required
 
 
 #adding a view for admin to give permissins to user
@@ -37,7 +39,10 @@ class AdminPermissionsView(APIView):
 class AddPermissionView(APIView):
     #this view is used to add permissions to user
     authentication_classes = (BasicAuthentication,)
-    permission_classes = (IsAuthenticated, IsAdminUser)
+    permission_classes = (IsAuthenticated,IsAdminUser)
+
+    @method_decorator(permission_required('auth.add_permission',raise_exception=True))
+    @method_decorator(check_permission('auth.add_permission'))
     def post(self, request):
         # ser
         data = AddPermissionSerializer(data=request.data)
@@ -104,7 +109,9 @@ class PostsGenericView(generics.GenericAPIView,
 
 
 class PostsApiView(APIView):
-    # the main advantage of using class over functional view is no need to worry about parsing !!!! Hurrayyyyy !!! 
+    authentication_classes = (BasicAuthentication, JWTAuthentication, TokenAuthentication)
+    permission_classes = (IsAuthenticated,)
+    # the main advantage of using class over functional view is no need to worry about parsing !!!! Hurrayyyyy !!!
     def get(self, request, pk=None):
         posts = Post.objects.all()
         if pk:
@@ -125,7 +132,7 @@ class PostsApiView(APIView):
         data = request.data
         post = PostSerializer(data=data)
         if post.is_valid():
-            post.save()
+            post.save(user=request.user)
             return Response(post.data, status=201)
         return Response(post.errors, status=400)
     
@@ -139,7 +146,7 @@ class PostsApiView(APIView):
         data = request.data
         post = PostSerializer(post, data=data)
         if post.is_valid():
-            post.save()
+            post.save(user=request.user)
             return Response(post.data)
     
     def delete(self, request, pk=None):
