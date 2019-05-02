@@ -1,4 +1,5 @@
 from api.utils import add_permissions, has_model_permissions
+from api.permissionclasses import ListPermission
 
 from rest_framework import viewsets
 from django.contrib.auth.models import User, Permission
@@ -48,6 +49,7 @@ class AddPermissionView(APIView):
         if success:
             return Response({'status': True, 'msg': 'Added permissions to user'})
         return Response({'status': False,'msg': 'Error Occured'})
+
 # we use view sets when we want a view or we want all the crud to be implemented without any other operations
 class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -73,7 +75,7 @@ class PostsGenericView(generics.GenericAPIView,
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     authentication_classes = (TokenAuthentication, BasicAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, ListPermission)
     # if we dont want pk as url parameter we can add a lookup field
     # lookup_field = 'id'
     # if we want to use some other field for querying like slugs
