@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Post(models.Model):
+    class Meta:
+        permissions = (
+            ('view_all_posts', 'View all the posts'),
+        )
     post = models.CharField(max_length=500)
     user = models.ForeignKey(User, related_name='posts')
     created_on = models.DateTimeField(auto_now_add=True)
