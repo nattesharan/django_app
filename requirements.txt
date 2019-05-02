@@ -5,3 +5,4 @@ Pillow==6.0.0
 djangorestframework==3.9.2
 django-rest-swagger==2.2.0
 djangorestframework-simplejwt==4.3.0
+django-extensions==2.1.6

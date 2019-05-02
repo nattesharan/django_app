@@ -46,3 +46,6 @@ if __name__ == "__main__":
 # we can alsoadd our own permissions in the model it is a tuple of tuples and then run migration
 # if we want to use group we can add permissons to a group and add that group to user
 # we can create a manage.py command for populationg the default groups
+
+
+# python manage.py runscript script_name
