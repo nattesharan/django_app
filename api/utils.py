@@ -34,6 +34,6 @@ def check_permission(permission):
             app, perm = permission.split('.')
             if has_model_permissions(request.user, [perm], app):
                 return view_func(request, *args, **kwargs)
-            return Response({'message': 'You dont have permission to do this'})
+            return Response({'message': 'You dont have permission to do this'}, status=401)
         return decorated
     return decorator

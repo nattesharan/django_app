@@ -1,5 +1,5 @@
 from api.utils import add_permissions, has_model_permissions, check_permission
-from api.permissionclasses import ListPermission
+from api.permissionclasses import ListPermission, AdminGroupRequired
 
 from rest_framework import viewsets
 from django.contrib.auth.models import User, Permission
@@ -60,7 +60,7 @@ class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     authentication_classes = (TokenAuthentication, BasicAuthentication, JWTAuthentication)
-    permission_classes = (IsAuthenticated, IsAdminUser)
+    permission_classes = (IsAuthenticated, IsAdminUser, AdminGroupRequired)
 
 
 # we can also use generics and mixins for creting apis its combination of ViewSet and APIView

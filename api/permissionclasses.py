@@ -8,3 +8,7 @@ class ListPermission(BasePermission):
                 return False
             return True
         return True
+
+class AdminGroupRequired(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.groups.filter(name='ADMIN_USER').exists()
