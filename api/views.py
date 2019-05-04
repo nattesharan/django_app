@@ -19,6 +19,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.contrib.auth import login, logout
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import action, detail_route
 
 #import jwt authentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -61,6 +62,28 @@ class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     authentication_classes = (TokenAuthentication, BasicAuthentication, JWTAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser, AdminGroupRequired)
+
+
+# if we use viewsets.GenericViewSet we need add the mixins 
+# viewsets.ViewSet customizable like api view
+# methods available are list(self, request), create(self, request), retrieve(self, request, pk=None), update(self, request, pk=None),
+# partial_update(self, request, pk=None), destroy(self, request, pk=None)
+class PostsView(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    # if we want more details for example in this case i want the user info for a post then
+    # url might be /api/v1/vposts/<pk>/user/ this should give the user info who created the post
+    # we can use detail_route instead of action if detail=True, and list_route if detail=False
+    # @detail_route(methods=['GET'])
+    @action(detail=True, methods=['GET'])
+    def user(self, request, pk=None):
+        post = self.get_object()
+        user = UserSerializer(post.user)
+        return Response(user.data)
+    
+    @detail_route(methods=['POST'])
+    def new_user(self, request, pk):
+        return Response({'message': 'You can create any thing hereeeee'})
 
 
 # we can also use generics and mixins for creting apis its combination of ViewSet and APIView

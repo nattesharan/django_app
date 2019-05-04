@@ -1,7 +1,7 @@
 from rest_framework import routers
 from django.conf.urls import url
 from api.views import UserView, posts, post_detail, PostsApiView, PostsGenericView, LoginApiView, LogoutApiView,\
-    AdminPermissionsView, AddPermissionView
+    AdminPermissionsView, AddPermissionView, PostsView
 from rest_framework.authtoken.views import ObtainAuthToken
 # for jwt
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -9,6 +9,13 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 router = routers.DefaultRouter()
 
 router.register(r'^users', UserView)
+
+# post_viewset = PostsView.as_view({
+#     'get': 'list',
+#     'post': 'create'
+# })
+# we can add the above to url also but why do you want to ??
+router.register(r'^vposts', PostsView)
 
 urlpatterns = router.urls
 urlpatterns += [
