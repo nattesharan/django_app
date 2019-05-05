@@ -63,6 +63,12 @@ class UserView(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication, BasicAuthentication, JWTAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser, AdminGroupRequired)
 
+    def get_queryset(self):
+        is_active = self.request.query_params.get('is_active', '')
+        if is_active:
+            is_active = (is_active == "True")
+            return self.queryset.filter(is_active=is_active)
+        return self.queryset
     # based on the method type or any other condition we can call the serializer by overiding get_serializer_class
     # def get_serializer_class(self):
     #     if self.action == 'list':
