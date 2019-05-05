@@ -31,6 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 class PostSerializer(serializers.ModelSerializer):
+    # so this is required only during fetching data
     posted_user_permissions = PermissionSerializer(many=True, required=False)
     class Meta:
         model = Post
@@ -43,7 +44,7 @@ class PostSerializer(serializers.ModelSerializer):
         )
         # read_only_fields must be specified here default it takes foreign key
         # its not used while cresting data only used when reading data
-        read_only_fields = ('user','posted_user_permissions',)
+        read_only_fields = ('user',)
         depth = 1
         # depth = 1 for one level
         # depth = 2 will give you second level and so on
