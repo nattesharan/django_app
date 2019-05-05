@@ -63,6 +63,10 @@ class UserView(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication, BasicAuthentication, JWTAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser, AdminGroupRequired)
 
+    # based on the method type or any other condition we can call the serializer by overiding get_serializer_class
+    # def get_serializer_class(self):
+    #     if self.action == 'list':
+    #         return UserSerializer
 
 # if we use viewsets.GenericViewSet we need add the mixins 
 # viewsets.ViewSet customizable like api view
