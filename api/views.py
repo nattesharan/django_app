@@ -71,6 +71,8 @@ class UserView(viewsets.ModelViewSet):
 class PostsView(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    # if we want to specify only certain methods in viewset
+    http_method_names = ['get']
     # if we want more details for example in this case i want the user info for a post then
     # url might be /api/v1/vposts/<pk>/user/ this should give the user info who created the post
     # we can use detail_route instead of action if detail=True, and list_route if detail=False
@@ -181,6 +183,18 @@ class PostsApiView(APIView):
             return JsonResponse({'error': 'Post not found with {}'.format(pk)}, status=404)
         post.delete()
         return Response({'message': 'Successfully deleted the post !'}, status=204)
+
+# class UserPosts(generics.ListAPIView) if we want only a particular api we can also do soo
+class UserPosts(generics.GenericAPIView, mixins.ListModelMixin):
+    serializer_class = PostSerializer
+    authentication_classes = (BasicAuthentication, JWTAuthentication, TokenAuthentication)
+    #the query set will be only the user posts so we cant just define queryset because it doesnt have access to request
+    # so we will overide the get_queryset method and define the queryset
+    def get_queryset(self):
+        return self.request.user.posts.all()
+    
+    def get(self, request):
+        return self.list(request)
 
 
 @api_view(['POST','GET'])

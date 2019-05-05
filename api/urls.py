@@ -1,7 +1,7 @@
 from rest_framework import routers
 from django.conf.urls import url
 from api.views import UserView, posts, post_detail, PostsApiView, PostsGenericView, LoginApiView, LogoutApiView,\
-    AdminPermissionsView, AddPermissionView, PostsView
+    AdminPermissionsView, AddPermissionView, PostsView, UserPosts
 from rest_framework.authtoken.views import ObtainAuthToken
 # for jwt
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -34,7 +34,8 @@ urlpatterns += [
     url(r'^auth/me/login/$', LoginApiView.as_view(), name='login_api'),
     url(r'^auth/me/logout/$', LogoutApiView.as_view(), name='logout_api'),
     url(r'^auth/token/$', TokenObtainPairView.as_view(), name='jwt_token_fetch'),
-    url(r'^auth/token/refresh/$', TokenRefreshView.as_view(), name='jwt_refresh_fetch')
+    url(r'^auth/token/refresh/$', TokenRefreshView.as_view(), name='jwt_refresh_fetch'),
+    url(r'^user/posts/$', UserPosts.as_view(), name='user_posts')
 ]
 
 # by default the access token has 5 mins of if access token is expired we use the refresh token to fetch new access token
