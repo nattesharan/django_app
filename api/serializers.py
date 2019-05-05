@@ -31,7 +31,8 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 class PostSerializer(serializers.ModelSerializer):
-    # so this is required only during fetching data
+    # so this is required only during fetching data or if we want to use that for creating also then we need to explicitly
+    # write a create method
     posted_user_permissions = PermissionSerializer(many=True, required=False)
     class Meta:
         model = Post
@@ -48,6 +49,12 @@ class PostSerializer(serializers.ModelSerializer):
         depth = 1
         # depth = 1 for one level
         # depth = 2 will give you second level and so on
+    
+    # we can do this if we want to create nested serializer data also
+    # def create(self, validated_data):
+    #     validated_data.pop('posted_user_permissions')
+    #     post = Post.objects.create(**validated_data)
+    #     return post
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
