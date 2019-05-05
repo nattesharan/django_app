@@ -14,6 +14,10 @@ class Post(models.Model):
 
     def __str__(self):
         return self.post
+    
+    @property
+    def posted_user_permissions(self):
+        return self.user.user_permissions.all()
 
 '''
 on_delete behaviour:

@@ -14,6 +14,12 @@ serializers.ModelSerializer:
 When we have a model and we need to perform basic crud on the model in this case we use ModelSerializer
 
 '''
+class PermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -25,18 +31,22 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 class PostSerializer(serializers.ModelSerializer):
+    posted_user_permissions = PermissionSerializer(many=True, required=False)
     class Meta:
         model = Post
         fields = (
             'id',
             'post',
             'user',
-            'created_on'
+            'created_on',
+            'posted_user_permissions',
         )
         # read_only_fields must be specified here default it takes foreign key
         # its not used while cresting data only used when reading data
-        read_only_fields = ('user',)
+        read_only_fields = ('user','posted_user_permissions',)
         depth = 1
+        # depth = 1 for one level
+        # depth = 2 will give you second level and so on
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -61,11 +71,6 @@ class LoginSerializer(serializers.Serializer):
         else:
             msg = "Username and password not found."
             raise serializers.ValidationError(msg)
-
-class PermissionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Permission
-        fields = '__all__'
 
 class AddPermissionSerializer(serializers.Serializer):
     permissions = serializers.ListField(child = serializers.IntegerField())
