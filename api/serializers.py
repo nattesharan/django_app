@@ -25,7 +25,6 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 class PostSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.pk')
     class Meta:
         model = Post
         fields = (
@@ -34,6 +33,10 @@ class PostSerializer(serializers.ModelSerializer):
             'user',
             'created_on'
         )
+        # read_only_fields must be specified here default it takes foreign key
+        # its not used while cresting data only used when reading data
+        read_only_fields = ('user',)
+        depth = 1
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
