@@ -29,6 +29,8 @@ from django.contrib.auth.decorators import permission_required
 
 # for filter backend
 from django_filters.rest_framework import DjangoFilterBackend
+#ordering filter and search filter are provided by rest framework
+from rest_framework.filters import OrderingFilter, SearchFilter
 
 #adding a view for admin to give permissins to user
 class AdminPermissionsView(APIView):
@@ -64,9 +66,13 @@ class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     authentication_classes = (TokenAuthentication, BasicAuthentication, JWTAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser, AdminGroupRequired)
-    filter_backends = (DjangoFilterBackend, )
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
     # now just like query params we can pass the params in request like ?is_active=True
     filter_fields = ('is_active', 'profile__id')
+    # for ordering the query params are ?ordering=date_joined fiedls which should be sorted must be specified
+    # /?ordering=-date_joined - before field for reverse ordering
+    # for ordering we can also pass multiple fields ?ordering=-date_joined,-id
+    ordering_fields = ('id', 'date_joined')
 
     def get_queryset(self):
         is_active = self.request.query_params.get('is_active', '')
