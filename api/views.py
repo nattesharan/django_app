@@ -31,6 +31,8 @@ from django.contrib.auth.decorators import permission_required
 from django_filters.rest_framework import DjangoFilterBackend
 #ordering filter and search filter are provided by rest framework
 from rest_framework.filters import OrderingFilter, SearchFilter
+# import the custom filter
+from api.custom_filters import UserFilter
 
 #adding a view for admin to give permissins to user
 class AdminPermissionsView(APIView):
@@ -68,7 +70,9 @@ class UserView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, IsAdminUser, AdminGroupRequired)
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     # now just like query params we can pass the params in request like ?is_active=True
-    filter_fields = ('is_active', 'profile__id')
+    # if custom filter is there then we can remove fields
+    # filter_fields = ('is_active', 'profile__id')
+    filter_class = UserFilter
     # for ordering the query params are ?ordering=date_joined fiedls which should be sorted must be specified
     # /?ordering=-date_joined - before field for reverse ordering
     # for ordering we can also pass multiple fields ?ordering=-date_joined,-id
