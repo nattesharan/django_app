@@ -27,6 +27,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required
 
+# for filter backend
+from django_filters.rest_framework import DjangoFilterBackend
 
 #adding a view for admin to give permissins to user
 class AdminPermissionsView(APIView):
@@ -62,6 +64,9 @@ class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     authentication_classes = (TokenAuthentication, BasicAuthentication, JWTAuthentication)
     permission_classes = (IsAuthenticated, IsAdminUser, AdminGroupRequired)
+    filter_backends = (DjangoFilterBackend, )
+    # now just like query params we can pass the params in request like ?is_active=True
+    filter_fields = ('is_active', 'profile__id')
 
     def get_queryset(self):
         is_active = self.request.query_params.get('is_active', '')
