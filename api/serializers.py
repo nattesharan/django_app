@@ -21,13 +21,15 @@ class PermissionSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    age = serializers.IntegerField(source='profile.age', required=False)
     class Meta:
         model = User
         fields = (
             'email',
             'first_name',
             'last_name',
-            'username'
+            'username',
+            'age'
         )
 
 class PostSerializer(serializers.ModelSerializer):
