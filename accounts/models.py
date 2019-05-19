@@ -13,6 +13,7 @@ class UserProfile(models.Model):
     description = models.CharField(max_length=256, default='')
     city = models.CharField(max_length = 32,default='')
     website = models.URLField(default='')
+    age = models.IntegerField(default=23)
     phone = models.CharField(max_length=10, validators=[MinLengthValidator(10)])
     image = models.ImageField(upload_to='profile_images', blank=True)
     friends = models.ManyToManyField(User, related_name='friends')
