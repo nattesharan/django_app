@@ -86,6 +86,18 @@ class UserView(viewsets.ModelViewSet):
             is_active = (is_active == "True")
             return self.queryset.filter(is_active=is_active)
         return self.queryset
+    
+    @detail_route(methods=['put'])
+    def profile(self, request, pk):
+        user = self.get_object()
+        profile = user.profile
+        try:
+            image = request.data['image']
+            profile.image = image
+            profile.save()
+            return Response({'msg': "image added successfully"})
+        except Exception as E:
+            return Response({'msg': str(E)}, status=400)
     # based on the method type or any other condition we can call the serializer by overiding get_serializer_class
     # def get_serializer_class(self):
     #     if self.action == 'list':
