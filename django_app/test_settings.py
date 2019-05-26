@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'accounts',
     'home',
     'api',
+    'extra_topics',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
