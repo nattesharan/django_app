@@ -11,7 +11,7 @@ class Command(BaseCommand):
         Product.objects.all().delete()
         self.stdout.write("Generating categories")
         categories = []
-        for num in range(51):
+        for num in range(50):
             # Is active will be False when the num is multiple of 5
             # This will generate 10 categories with the False flag
             is_active = num % 5 != 0
