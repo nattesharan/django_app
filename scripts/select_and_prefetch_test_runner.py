@@ -1,4 +1,4 @@
-from extra_topics.utils import list_products
+from extra_topics.utils import list_products, list_products_with_select_related
 from extra_topics.decorators import query_info
 
 def run():
@@ -13,6 +13,7 @@ def run():
     it shows the number of the queries and the time in seconds for each example
     '''
     query_info(list_products)()
+    print("#######################################################")
 
     '''
     Wow! 501 queries for that simple piece of code?? What happened?
@@ -25,4 +26,11 @@ def run():
     To avoid this high number of queries when accessing foreign keys or one to one fields we can use the select_related 
     method.
     '''
+    products_fetched_with_select_related = list_products_with_select_related()
+
+    assert products_fetched_with_select_related == products_list
+
+    query_info(list_products_with_select_related)()
+
+    # Congrats! Now we did only 1 query instead of 501, it’s a real improvement
 
