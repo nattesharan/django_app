@@ -7,5 +7,7 @@ env:
   - DJANGO=1.11 DB=mysql
 install:
   - pip install -r requirements.txt
+before_script:
+  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('Up123pU') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
 script:
   - pytest
