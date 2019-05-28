@@ -9,6 +9,9 @@ jobs:
           MYSQL_ROOT_PASSWORD: 'Up123pU'
           MYSQL_ROOT_HOST: 127.0.0.1
           MYSQL_USER: root
+    branches:
+      only:
+        - *
     steps:
       - checkout
       - restore_cache:
