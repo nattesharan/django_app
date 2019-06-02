@@ -1,6 +1,8 @@
 from extra_topics.utils import (list_products, list_products_with_select_related, 
                                 list_categories, list_categories_with_prefetch_related,
-                                categories_list_active_subcategories)
+                                categories_list_active_subcategories,
+                                categories_list_active_subcategories_using_prefetch_attr,
+                                categories_list_active_subcategories_without_prefetch_attr)
 from extra_topics.decorators import query_info
 
 def run():
@@ -73,10 +75,11 @@ def run():
     That’s why we have 52 queries, 51 queries iterating over the categories and 1 query to get all the results in prefetch.s for us.
     '''
     # Let’s see how to solve this problem using the new Prefetch introduced recently by Django
+    # 1) Using Prefetch with to_attr
+    query_info(categories_list_active_subcategories_using_prefetch_attr)()
+    print("#######################################################")
+    # Great!! Now again we have only two queries
     
-
-
-
-
-
-
+    # Let’s how we could achieve the same result without using the to_attr parameter.
+    query_info(categories_list_active_subcategories_without_prefetch_attr)()
+    print("#######################################################")
