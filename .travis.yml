@@ -6,10 +6,13 @@ services:
   - mysql
 env:
   - DJANGO=1.11 DB=mysql
+  - CODECOV_TOKEN=dc1a7760-9818-493a-9630-e24f3c1d0f7e
 install:
   - pip install -r requirements.txt
 before_script:
   - echo "USE mysql;\nUPDATE user SET password=PASSWORD('Up123pU') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
 script:
-  - pytest
+  - pytest --cov-report term -x -s
   - python manage.py test
+after_success:
+  - codecov
