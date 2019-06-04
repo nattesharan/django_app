@@ -12,7 +12,7 @@ install:
 before_script:
   - echo "USE mysql;\nUPDATE user SET password=PASSWORD('Up123pU') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
 script:
-  - pytest --cov-report term -x -s
+  - pytest --cov-report=xml -x -s
   - python manage.py test
 after_success:
   - codecov

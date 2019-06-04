@@ -6,3 +6,4 @@ htmlcov/
 .vscode/
 static/
 profile_images/
+*.xml
