@@ -36,6 +36,7 @@ class TestUserWithFixture:
     def test_create_user(self, new_user):
         created_user = User.objects.get(pk=new_user.pk)
         assert created_user
+        assert False
 #--reuse-db - reuse the testing database between test runs
 # --create-db - force re creation of the test database
 # --nomigrations will disable Django migrations and create the database by inspecting all models.
