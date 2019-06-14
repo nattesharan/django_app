@@ -69,4 +69,13 @@ ___________________________________________________________________________
         e) Install all the Requirements
             pip install -r requirements.txt
         f) Run the tests and check if everything is fine
+        g) Start the applicatin
+            python manage.py runserver 0.0.0.0:8000
+            Normally this is not the way we start the applicatin we should start it with gunicorn or uwsgi
+            But just for confirmation we start it like this
+            After starting the application goto http:ip_addr:8000 to see your application working
+            if you dont see please make sure you expose the port by creating firewall rules
+            But generally we dont expose the port directly but we run nginx which listens to port 80
+            and then it routes the request to specific port
+
 
