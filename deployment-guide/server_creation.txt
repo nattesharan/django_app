@@ -1,3 +1,6 @@
+1) Creation of VM and ssh into the VM
+___________________________________________________________________________
+
 For having the application available over the internet we need to have it running in an external virtual machine.
 
 They are many services which provide a virtual machine. The most popular of them are AWS, Azure and GCP.
@@ -42,4 +45,28 @@ If using GCP can skip the below step-2
 
 After following the above steps we can just ssh to the vm with 'ssh username@ip' 
     
+2) Installing the dependencies for the application to run
+___________________________________________________________________________
+
+1) Requirements for  the application:
+        a) Python 3.6.4
+            sudo apt-get install software-properties-common python-software-properties
+            sudo add-apt-repository ppa:jonathonf/python-3.6
+            sudo apt-get update
+            sudo apt-get install python3.6
+        b) Mysql-5.7
+            sudo apt-get install mysql-server
+
+            create database for the application
+        c) Git
+            sudo apt-get install git
+        d) Install python pip
+            sudo apt-get install python-pip
+        e) If you want to run your application in a seperate python environment you can install virtualenv using pip
+            sudo pip install virtualenv
+        f) create python3 virtualenv inside the project
+            virtualenv --python=python3 venv
+        e) Install all the Requirements
+            pip install -r requirements.txt
+        f) Run the tests and check if everything is fine
 
