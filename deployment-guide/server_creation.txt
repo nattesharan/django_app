@@ -1,0 +1,45 @@
+For having the application available over the internet we need to have it running in an external virtual machine.
+
+They are many services which provide a virtual machine. The most popular of them are AWS, Azure and GCP.
+
+Each service has its own way for creating a VM. You can follow their guide for creating an instance(VM).
+
+After creating a virtual machine you can ssh into the VM and setup the respective project on the VM.
+
+They are many ways by which you can ssh into the VM. 
+
+1) If you want to login into an azure vm then it prompts for username and password.
+2) Aws provides a .pem file using which you can ssh into the VM.
+3) Google does not have any of the above you can ssh from the browser itself.
+
+But there is one way by which we can ssh into all of them without passwords and .pem files.
+Instead of .pem files and passwords we will be adding our local machines public key to authorized keys in the VM.
+
+Please follow the below steps in order to add authorized keys to the VM:
+
+1) Firstly login to the VM using the default methods which are mentioned above.
+
+If using GCP can skip the below step-2
+
+2) After logging in create a .ssh dir and file named authorized_keys in the .ssh dir
+    Create the ~/.ssh directory and authorized_keys file if they don’t already exist:
+        mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys
+    Give the ~/.ssh directory and authorized_keys files appropriate file permissions:
+        chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
+
+3) Generate the public key in your machine if it does not exist
+        ssh-keygen
+    Press Enter to use the default names id_rsa and id_rsa.pub in the /home/your_username/.ssh directory before 
+    entering your passphrase (passphrase is not mandatory).
+    
+    This will create id_rsa.pub in /.ssh/ dir of your machine
+
+4) Copy the content of id_rsa.pub
+
+5) Paste the copied content in authorized_keys of your vm. For AWS and azure this should be file but for GCP you cant
+   directly add your key.
+   For GCP VM we need to add it in SSH Keys of  metadata.
+
+After following the above steps we can just ssh to the vm with 'ssh username@ip' 
+    
+
