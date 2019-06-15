@@ -7,3 +7,5 @@ htmlcov/
 static/
 profile_images/
 *.xml
+*.log
+*.pid

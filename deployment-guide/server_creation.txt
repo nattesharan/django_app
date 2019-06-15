@@ -45,7 +45,7 @@ If using GCP can skip the below step-2
 
 After following the above steps we can just ssh to the vm with 'ssh username@ip' 
     
-2) Installing the dependencies for the application to run
+2) Installing the dependencies for the application to run and running the application
 ___________________________________________________________________________
 
 1) Requirements for  the application:
@@ -78,4 +78,46 @@ ___________________________________________________________________________
             But generally we dont expose the port directly but we run nginx which listens to port 80
             and then it routes the request to specific port
 
+3) Starting the application with gunicorn
+___________________________________________________________________________
 
+    a) gunicorn is a python package and it should install along with the other requirements
+    b) You can now start the application with below command
+        gunicorn django_app.wsgi:application --bind=0.0.0.0:8000
+    c) when deployed in server gunicorn does not by default does not serve static files so we add whitenoise(a django middleware)
+       NOTE: but not usually recommended They are some other best ways will update along the journey :)
+    d) we can also specify other config for gunicorn
+        --workers=WORKERS - The number of worker processes. This number should generally be between 2-4 workers per core 
+                            in the server. You can determine the number of workers by using the formula (2*(cores)+1)
+        --name=APP_NAME - You can specify name of the application
+        --pid FILENAME - Write the gunicorn process id to FILENAME
+        --preload -  Load application code before the worker processes are forked.By preloading an application you can 
+                    save some RAM resources as well as speed up server boot times. Although, if you defer application 
+                    loading to each worker process, you can reload your application code easily by restarting workers.
+        --reload - Restart workers when code changes.This setting is intended for development. It will cause workers to 
+                    be restarted whenever application code changes.
+        --log-level LEVEL - The granularity of Error log outputs.Valid level names are: debug, info, warning, error, critical
+        --access-logfile FILE - The Access log file to write to.'-' means log to stdout.
+        --access-logformat STRING - %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+                                    h	remote address
+                                    l	'-'
+                                    u	user name
+                                    t	date of the request
+                                    r	status line (e.g. GET / HTTP/1.1)
+                                    m	request method
+                                    U	URL path without query string
+                                    q	query string
+                                    H	protocol
+                                    s	status
+                                    B	response length
+                                    b	response length or '-' (CLF format)
+                                    f	referer
+                                    a	user agent
+                                    T	request time in seconds
+                                    D	request time in microseconds
+                                    L	request time in decimal seconds
+                                    p	process ID
+                                    {Header}i	request header
+                                    {Header}o	response header
+                                    {Variable}e	environment variable
+        --error-logfile FILE -The Error log file to write to.Using '-' for FILE makes gunicorn log to stderr.
