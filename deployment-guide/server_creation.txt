@@ -122,7 +122,39 @@ ___________________________________________________________________________
                                     {Variable}e	environment variable
         --error-logfile FILE -The Error log file to write to.Using '-' for FILE makes gunicorn log to stderr.
     e) Start the app with 
-        gunicorn django_app.wsgi:application --bind=0.0.0.0:8000 --log-level info --access-logfile django_app.log --error-logfile app_errors.log --pid django_app.pid &
+        gunicorn django_app.wsgi:application --bind=0.0.0.0:8000 --log-level info --access-logfile django_app.log --error-logfile app_errors.log --pid django_app.pid --preload &
         Using & in the end will start the app in background
         and it writes the pid 
-        we can kill the app using the process id 
+        we can kill the app using the process id
+4) Using supervisor for managing the application
+___________________________________________________________________________
+    a) Currently we start the application with below command
+        gunicorn django_app.wsgi:application --bind=0.0.0.0:8000 --log-level info --access-logfile django_app.log --error-logfile app_errors.log --pid django_app.pid &
+        we dont have control of the application like start, stop, restart and checking the status
+    b) A Process Control System. Supervisor is a client/server system that allows its users to monitor and control a 
+       number of processes on UNIX-like operating systems. It shares some of the same goals of programs like launchd, 
+       daemontools, and runit.
+    c) If we configure our application with supervisor we can start, stop, restart easily without any hassles.
+    d) Below are the steps to connfigure the application with supervisor
+
+        1) Install supervisor
+            sudo apt-get install supervisor
+        2) Create a supervisor configuration file:
+            sudo vim /etc/supervisor/conf.d/mysite.conf
+
+        3) Add the following config
+            [program:MYPROJECTALIASSUPERVISOR]
+            command=/PATH/TO/VIRTUALENV/bin/gunicorn django_app.wsgi:application --bind=0.0.0.0:8000 --log-level info --access-logfile django_app.log --error-logfile app_errors.log --pid django_app.pid &
+            directory=/PATH/TO/PROJECT/
+            user=USER-OF-BASH
+            autostart=true
+            autorestart=true
+            redirect_stderr=True
+            # env variables if any
+            # environment=DJANGO_SETTINGS_MODULE="app.settings"
+        4) All right! Now we will launch the following commands to start the settings previously made:
+            sudo supervisorctl reread
+            sudo supervisorctl update
+            sudo supervisorctl start MYPROJECTALIASSUPERVISOR
+            sudo supervisorctl restart MYPROJECTALIASSUPERVISOR
+            sudo supervisorctl stop MYPROJECTALIASSUPERVISOR
