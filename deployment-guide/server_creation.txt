@@ -1,0 +1,189 @@
+1) Creation of VM and ssh into the VM
+___________________________________________________________________________
+
+For having the application available over the internet we need to have it running in an external virtual machine.
+
+They are many services which provide a virtual machine. The most popular of them are AWS, Azure and GCP.
+
+Each service has its own way for creating a VM. You can follow their guide for creating an instance(VM).
+
+After creating a virtual machine you can ssh into the VM and setup the respective project on the VM.
+
+They are many ways by which you can ssh into the VM. 
+
+1) If you want to login into an azure vm then it prompts for username and password.
+2) Aws provides a .pem file using which you can ssh into the VM.
+3) Google does not have any of the above you can ssh from the browser itself.
+
+But there is one way by which we can ssh into all of them without passwords and .pem files.
+Instead of .pem files and passwords we will be adding our local machines public key to authorized keys in the VM.
+
+Please follow the below steps in order to add authorized keys to the VM:
+
+1) Firstly login to the VM using the default methods which are mentioned above.
+
+If using GCP can skip the below step-2
+
+2) After logging in create a .ssh dir and file named authorized_keys in the .ssh dir
+    Create the ~/.ssh directory and authorized_keys file if they don’t already exist:
+        mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys
+    Give the ~/.ssh directory and authorized_keys files appropriate file permissions:
+        chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
+
+3) Generate the public key in your machine if it does not exist
+        ssh-keygen
+    Press Enter to use the default names id_rsa and id_rsa.pub in the /home/your_username/.ssh directory before 
+    entering your passphrase (passphrase is not mandatory).
+    
+    This will create id_rsa.pub in /.ssh/ dir of your machine
+
+4) Copy the content of id_rsa.pub
+
+5) Paste the copied content in authorized_keys of your vm. For AWS and azure this should be file but for GCP you cant
+   directly add your key.
+   For GCP VM we need to add it in SSH Keys of  metadata.
+
+After following the above steps we can just ssh to the vm with 'ssh username@ip' 
+    
+2) Installing the dependencies for the application to run and running the application
+___________________________________________________________________________
+
+1) Requirements for  the application:
+        a) Python 3.6.4
+            sudo apt-get install software-properties-common python-software-properties
+            sudo add-apt-repository ppa:jonathonf/python-3.6
+            sudo apt-get update
+            sudo apt-get install python3.6
+        b) Mysql-5.7
+            sudo apt-get install mysql-server
+
+            create database for the application
+        c) Git
+            sudo apt-get install git
+        d) Install python pip
+            sudo apt-get install python-pip
+        e) If you want to run your application in a seperate python environment you can install virtualenv using pip
+            sudo pip install virtualenv
+        f) create python3 virtualenv inside the project
+            virtualenv --python=python3 venv
+        e) Install all the Requirements
+            pip install -r requirements.txt
+        f) Run the tests and check if everything is fine
+        g) Start the applicatin
+            python manage.py runserver 0.0.0.0:8000
+            Normally this is not the way we start the applicatin we should start it with gunicorn or uwsgi
+            But just for confirmation we start it like this
+            After starting the application goto http:ip_addr:8000 to see your application working
+            if you dont see please make sure you expose the port by creating firewall rules
+            But generally we dont expose the port directly but we run nginx which listens to port 80
+            and then it routes the request to specific port
+
+3) Starting the application with gunicorn
+___________________________________________________________________________
+
+    a) gunicorn is a python package and it should install along with the other requirements
+    b) You can now start the application with below command
+        gunicorn django_app.wsgi:application --bind=0.0.0.0:8000
+    c) when deployed in server gunicorn does not by default does not serve static files so we add whitenoise(a django middleware)
+       NOTE: but not usually recommended They are some other best ways will update along the journey :)
+    d) we can also specify other config for gunicorn
+        --workers=WORKERS - The number of worker processes. This number should generally be between 2-4 workers per core 
+                            in the server. You can determine the number of workers by using the formula (2*(cores)+1)
+        --name=APP_NAME - You can specify name of the application
+        --pid FILENAME - Write the gunicorn process id to FILENAME
+        --preload -  Load application code before the worker processes are forked.By preloading an application you can 
+                    save some RAM resources as well as speed up server boot times. Although, if you defer application 
+                    loading to each worker process, you can reload your application code easily by restarting workers.
+        --reload - Restart workers when code changes.This setting is intended for development. It will cause workers to 
+                    be restarted whenever application code changes.
+        --log-level LEVEL - The granularity of Error log outputs.Valid level names are: debug, info, warning, error, critical
+        --access-logfile FILE - The Access log file to write to.'-' means log to stdout.
+        --access-logformat STRING - %(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
+                                    h	remote address
+                                    l	'-'
+                                    u	user name
+                                    t	date of the request
+                                    r	status line (e.g. GET / HTTP/1.1)
+                                    m	request method
+                                    U	URL path without query string
+                                    q	query string
+                                    H	protocol
+                                    s	status
+                                    B	response length
+                                    b	response length or '-' (CLF format)
+                                    f	referer
+                                    a	user agent
+                                    T	request time in seconds
+                                    D	request time in microseconds
+                                    L	request time in decimal seconds
+                                    p	process ID
+                                    {Header}i	request header
+                                    {Header}o	response header
+                                    {Variable}e	environment variable
+        --error-logfile FILE -The Error log file to write to.Using '-' for FILE makes gunicorn log to stderr.
+    e) Start the app with 
+        gunicorn django_app.wsgi:application --bind=0.0.0.0:8000 --log-level info --access-logfile django_app.log --error-logfile app_errors.log --pid django_app.pid --preload &
+        Using & in the end will start the app in background
+        and it writes the pid 
+        we can kill the app using the process id
+4) Using supervisor for managing the application
+___________________________________________________________________________
+    a) Currently we start the application with below command
+        gunicorn django_app.wsgi:application --bind=0.0.0.0:8000 --log-level info --access-logfile django_app.log --error-logfile app_errors.log --pid django_app.pid &
+        we dont have control of the application like start, stop, restart and checking the status
+    b) A Process Control System. Supervisor is a client/server system that allows its users to monitor and control a 
+       number of processes on UNIX-like operating systems. It shares some of the same goals of programs like launchd, 
+       daemontools, and runit.
+    c) If we configure our application with supervisor we can start, stop, restart easily without any hassles.
+    d) Below are the steps to connfigure the application with supervisor
+
+        1) Install supervisor
+            sudo apt-get install supervisor
+        2) Create a supervisor configuration file:
+            sudo vim /etc/supervisor/conf.d/mysite.conf
+
+        3) Add the following config
+            [program:MYPROJECTALIASSUPERVISOR]
+            command=/PATH/TO/VIRTUALENV/bin/gunicorn django_app.wsgi:application --bind=0.0.0.0:8000 --log-level info --access-logfile django_app.log --error-logfile app_errors.log --pid django_app.pid &
+            directory=/PATH/TO/PROJECT/
+            user=USER-OF-BASH
+            autostart=true
+            autorestart=true
+            redirect_stderr=True
+            # env variables if any
+            # environment=DJANGO_SETTINGS_MODULE="app.settings"
+        4) All right! Now we will launch the following commands to start the settings previously made:
+            sudo supervisorctl reread
+            sudo supervisorctl update
+            sudo supervisorctl start MYPROJECTALIASSUPERVISOR
+            sudo supervisorctl restart MYPROJECTALIASSUPERVISOR
+            sudo supervisorctl stop MYPROJECTALIASSUPERVISOR
+5) Setting up nginx
+___________________________________________________________________________
+    a) Instead of opening the port to the world we can use nginx to route
+    b) Install nginx
+        sudo apt-get install nginx
+        Run sudo service nginx status to make sure its running
+    c) Create config in sites available in /etc/nginx/sites-available/
+        sudo touch /etc/nginx/sites-available/django_app
+    d) Add the following config
+        server {
+            listen 80;
+            server_name 35.200.149.215;
+            location = /favicon.ico { access_log off; log_not_found off; }
+            location / {
+            include proxy_params;
+            proxy_pass http://127.0.0.1:8000;
+            }
+        }
+    e) After adding this enable the config
+       sudo ln -s /etc/nginx/sites-available/django_app /etc/nginx/django_app
+       sudo nginx -t
+       sudo service nginx restart
+    f) Now if we want to access the app no need to specify the port specifying the ip should work
+    g) By default nginx logs the requests in /var/log/nginx/access.log and /var/log/nginx/error.log
+       If we want to change the log format then we can add the following in the http block of /etc/nginx/nginx.conf
+       log_format format '$remote_addr -  $remote_user [$time_local]  '
+                '"$request" $status $bytes_sent '
+                '"$http_referer" "$http_user_agent"';
+        access_log /var/log/nginx/access.log format;
