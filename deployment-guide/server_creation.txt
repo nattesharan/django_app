@@ -121,3 +121,8 @@ ___________________________________________________________________________
                                     {Header}o	response header
                                     {Variable}e	environment variable
         --error-logfile FILE -The Error log file to write to.Using '-' for FILE makes gunicorn log to stderr.
+    e) Start the app with 
+        gunicorn django_app.wsgi:application --bind=0.0.0.0:8000 --log-level info --access-logfile django_app.log --error-logfile app_errors.log --pid django_app.pid &
+        Using & in the end will start the app in background
+        and it writes the pid 
+        we can kill the app using the process id 
