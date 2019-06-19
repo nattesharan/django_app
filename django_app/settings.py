@@ -224,3 +224,5 @@ AUTHENTICATION_BACKENDS = (
 GOOGLE_APPLICATION_CREDENTIALS=os.path.join(BASE_DIR, 'django_app/key.json')
 PROJECT = 'personal-243717'
 TOPIC = 'hello_topic'
+SUBSCRIBER_1='subscription1'
+SUBSCRIBER_2='subscription2'

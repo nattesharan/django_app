@@ -41,3 +41,10 @@ ________________________________________________________________________
 
 6) install these pip requirements
     pip install google-cloud-pubsub==0.39.1
+check pubsub/ endpoint for implementation of the publisher
+We publish messages to the topic and all the subscribers of the topic get the message
+
+Lets write a Subscriber now
+
+A subscriber must be kept running all the time in order to get the messages So we run in with infinite loop
+check pub_sub_subscriber.py for implementation.
