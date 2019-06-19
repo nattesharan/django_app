@@ -1,0 +1,43 @@
+We start a publisher application that sends a "Hello, World!" message to two subscribers, as illustrated below:
+
+
+Set up your GCP project and Cloud Pub/Sub topic and subscriptions
+________________________________________________________________________
+Google Cloud Pub / Sub is a fully-managed real-time messaging service that allows you to send and receive messages 
+between independent applications. ... Publisher applications can send messages to a topic and other applications can 
+subscribe to that topic to receive the messages.
+
+
+1) Log into Google Cloud Platform Console.
+2) Go to the marketplace and search for pubsub. Click on that
+3) Click Create a topic. Publishing applications send messages to topics. Use hello_topic as the Name.
+4) Click the topic name, then click Create Subscription:
+    Name the subscription sub_one. Do not change any of the default settings. Note that you are creating a 
+    StreamingPull subscription, which is a type of pull subscription.
+
+    Use the same procedure to create another subscription attached to hello_topic, named sub_two.
+
+    You can click the topic name in the Topics view to see the new subscriptions or you can change to the Subscriptions view.
+
+At this point, your Cloud Pub/Sub environment is ready to manage message flow between the quickstart's publishing 
+and subscribing applications.
+
+Create service account credentials
+________________________________________________________________________
+1) Go to the Service accounts section of the console.
+
+2) GO TO CLOUD IAM SERVICE ACCOUNTS
+        Select your project and click Create Service Account.
+        Enter a Service account name, such as pubsub-quickstart.
+        Click Create.
+        The service account needs publishing and subscribing permissions. Use the Select a role dropdown to add the
+        Cloud Pub/Sub Publisher role.
+
+        Click Add another role and add Cloud Pub/Sub Subscriber.
+3) Click Continue. Note that you do not need to grant users access to this service account.
+4) Click Create Key. The key is used by the client library to access the Cloud Pub/Sub API.
+5) Select JSON and click Create.
+    The key is sent to your Downloads folder. For the purposes of this quickstart, you can leave it there.
+
+6) install these pip requirements
+    pip install google-cloud-pubsub==0.39.1

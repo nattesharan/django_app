@@ -26,7 +26,9 @@ urlpatterns = [
     url(r'^account/', include('accounts.urls', namespace='accounts')),
     url(r'^home/', include('home.urls', namespace='home')),
     url(r'^api/v1/', include('api.urls', namespace='api')),
-    url(r'^api/docs/', schema_view)
+    url(r'^api/docs/', schema_view),
+    # pubsub demo urls
+    url(r'pubsub/', views.publisher)
 ] + static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
