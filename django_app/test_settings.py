@@ -139,6 +139,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'django_app/media')
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/home/'
 LOGIN_EXEMPT_URLS = (
+    r'^pubsub/',
     r'^account/register/$',
     r'^account/reset-password/$',
     r'^account/reset-password/done/$',
@@ -159,3 +160,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     )
 }
+
+# Pub sub settings
+GOOGLE_APPLICATION_CREDENTIALS=os.path.join(BASE_DIR, 'django_app/key.json')
+PROJECT = 'personal-243717'
+TOPIC = 'hello_topic'
+SUBSCRIBER_1='subscription1'
+SUBSCRIBER_2='subscription2'
