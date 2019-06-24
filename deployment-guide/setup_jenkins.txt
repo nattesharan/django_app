@@ -33,3 +33,16 @@ Open to /var/lib/jenkins/secrets/initialAdminPassword, copy your password and pa
 install the recommended plugins
 
 After that create a user and then it takes to the dashboard
+
+Dependencies
+Jenkins by default do not access git repositories, so we must install a Git plugin. 
+Go to the Jenkins server, select the “Manage Jenkins” option and on the next page click on “Manage Plugins”:
+
+Search for github plugin in the available plugins an install the plugin
+Select the plugin and click on “Download now and install after restart”
+
+2) Configuring our Job
+________________________________
+
+Now with our Jenkins server installed with the Git plugin, we must configure our job for Jenkins to be able to poll our 
+repository for changes.
