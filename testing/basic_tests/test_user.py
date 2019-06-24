@@ -29,7 +29,7 @@ class TestUserWithSetup(TestCase):
 
     def test_create_user(self):
         created_user = User.objects.get(pk=self.user.pk)
-        assert created_user
+        assert False
 
 @pytest.mark.django_db
 class TestUserWithFixture:
