@@ -1,0 +1,35 @@
+What is Jenkins?
+Jenkins is an open source automation tool written in Java with plugins built for Continuous Integration purpose. 
+Jenkins is used to build and test your software projects continuously making it easier for developers to integrate changes
+ to the project, and making it easier for users to obtain a fresh build. It also allows you to continuously deliver your 
+ software by integrating with a large number of testing and deployment technologies.
+
+With Jenkins, organizations can accelerate the software development process through automation. Jenkins integrates 
+development life-cycle processes of all kinds, including build, document, test, package, stage, deploy, static analysis 
+and much more.
+
+1) Installing Jenkins
+________________________________
+
+Jenkins is build using java so make sure java is installed
+    sudo apt-get install default-jre
+    sudo apt-get install default-jdk
+
+After that install Jenkins
+
+    wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+    sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+    sudo apt-get update
+    sudo apt-get install jenkins
+
+After installing jenkins we need to change the host so follow the steps
+
+    sudo vi /etc/default/jenkins
+    Add HTTP_HOST=0.0.0.0
+    And the restart jenkins 
+        sudo service jenkins restart
+Now we can see the jenkins interface  on http://HOST:8080/
+Open to /var/lib/jenkins/secrets/initialAdminPassword, copy your password and paste it in the form displayed
+install the recommended plugins
+
+After that create a user and then it takes to the dashboard
