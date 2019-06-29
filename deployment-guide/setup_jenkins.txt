@@ -46,3 +46,44 @@ ________________________________
 
 Now with our Jenkins server installed with the Git plugin, we must configure our job for Jenkins to be able to poll our 
 repository for changes.
+
+Create a free style project in jenkins
+
+In the source code management select git and add the branch to build and test for CI and git project url
+In build triggers select GitHub hook trigger for GITScm polling which will trigger builds when the code push happens or some event occurs in
+the project
+
+Next in the build select Execute shell and then paste the following:
+
+#!/bin/bash
+set -e
+export WORKSPACE=`pwd`
+# Create/Activate virtualenv
+virtualenv venv -p python3
+source venv/bin/activate
+# Install Requirements
+pip install -r requirements.txt
+# Run tests
+python manage.py test
+pytest --cov-report=xml -x -s
+codecov
+cd /home/nattesharan/django_app/
+source venv/bin/activate
+pip install -r requirements.txt
+git pull origin master
+sudo supervisorctl restart django_app
+whoami
+
+This can be anything but I've wrote my own provisioning and then save the job.
+
+Then goto github and select the project and then goto settings then select webhooks and create a new webhook
+Payload URL: protocol://host/github-webhook/
+CONtent-Type: Application/json
+Active: true
+And then save the webhook.
+We can also select the events where we want to trigger the webhook.
+sudo chmod 700 django_app/
+sudo setfacl -R -m user:jenkins:rwx django_app/
+sudo vi /etc/sudoers
+Add in the last
+jenkins ALL=(ALL) NOPASSWD: ALL
