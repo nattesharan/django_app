@@ -140,7 +140,7 @@ ___________________________________________________________________________
         1) Install supervisor
             sudo apt-get install supervisor
         2) Create a supervisor configuration file:
-            sudo vim /etc/supervisor/conf.d/mysite.conf
+            sudo vim /etc/supervisor/conf.d/django_app.conf
 
         3) Add the following config
             [program:MYPROJECTALIASSUPERVISOR]
