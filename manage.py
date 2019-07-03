@@ -53,3 +53,5 @@ if __name__ == "__main__":
 
 # Starting the app with gunicorn
 # gunicorn django_app.wsgi:application --bind=0.0.0.0:8000 --log-level info --access-logfile django_app.log --error-logfile app_errors.log --pid django_app.pid
+
+# docker exec -it container_id python manage.py migrate

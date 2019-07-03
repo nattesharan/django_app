@@ -1,0 +1,29 @@
+version: '3.0'
+services:
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'django_app'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: Up123pU'
+      MYSQL_ROOT_PASSWORD: 'Up123pU'
+      TZ: UTC
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - 3306:3306
+  webapp:
+    build: .
+    entrypoint: ./start.sh
+    restart: always
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    links:
+      - db
+
+
+
