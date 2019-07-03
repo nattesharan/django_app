@@ -86,12 +86,11 @@ WSGI_APPLICATION = 'django_app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'django_app',
-        'HOST': '127.0.0.1',
+        'HOST': 'db' if 'USING_DOCKER' in os.environ else '127.0.0.1',
         'PORT': '3306',
         'USER': 'root',
         'PASSWORD': 'Up123pU'
