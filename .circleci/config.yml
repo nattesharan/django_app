@@ -15,7 +15,6 @@ jobs:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run:
           command: |
-            sudo apt-get install python3-mysqldb default-libmysqlclient-dev python-dev
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
