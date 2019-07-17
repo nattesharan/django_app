@@ -16,3 +16,24 @@ services:
 # after exporting the logs to elastic search go to index management in settings of kibana and select the filebeat index
 # that should show all the logs in kibana
 # ELK stack can also be used as APM and for storing the application logs
+
+
+# We can test i flogstash is working like the below
+
+# Open a shell prompt in the container and type (replacing <container-name> with the name of the container, 
+# e.g. elkdocker_elk_1 in the example above):
+# sudo docker exec -it <container-name> /bin/bash
+# At the prompt, enter:
+
+# /opt/logstash/bin/logstash --path.data /tmp/logstash/data \
+#       -e 'input { stdin { } } output { elasticsearch { hosts => ["localhost"] } }'
+# Wait for Logstash to start (as indicated by the message The stdin plugin is now waiting for input:), then type 
+# some dummy text followed by Enter to create a log entry:
+# this is a dummy entry
+# this is test
+# If you browse to http://<your-host>:9200/_search?pretty (e.g. http://host:9200/_search?pretty for a local native 
+# instance of Docker) you'll see that Elasticsearch has indexed the entry:
+# You can now browse to Kibana's web interface at http://<your-host>:5601 (e.g. http://localhost:5601 for a 
+# local native instance of Docker).
+# go to index management in settings of kibana and select the logstash-* index
+#that should show up all the logstash logs in kibana
