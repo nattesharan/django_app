@@ -6,3 +6,13 @@ services:
       - "5601:5601"
       - "9200:9200"
       - "5044:5044"
+# Caution: Install the entire elk stack on a new vm as its soo heavy..
+# running docker compose -f elk.yml up -d should run the entire elk stack
+# just play with it
+# GO to home click on add logs and select add log data and see the available services from where we can pull the logs
+# select nginx as we have it in the main server and try pulling the logs using file beat
+# http://host:5601/app/kibana#/home/tutorial/nginxLogs?_g=() follow the docs on how to send the nginx logs to elastic search
+# using filebeat
+# after exporting the logs to elastic search go to index management in settings of kibana and select the filebeat index
+# that should show all the logs in kibana
+# ELK stack can also be used as APM and for storing the application logs
