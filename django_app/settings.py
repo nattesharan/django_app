@@ -192,11 +192,21 @@ LOGGING = {
         "console_json": {
             "class": "logging.StreamHandler",
             "formatter": "json_formatter",
+        },
+        'logstash': {
+            'class': 'logstash.TCPLogstashHandler',
+            'host': '35.240.149.42',
+            'level': 'DEBUG',
+            'port': 5959, # Default value: 5959
+            'version': 1, # Version of logstash event schema. Default value: 0 (for backward compatibility of the library)
+            'message_type': 'logstash',  # 'type' field in logstash message. Default value: 'logstash'.
+            'fqdn': False, # Fully qualified domain name. Default value: false.
+            'tags': ['app']
         }
     },
     'loggers': {
         '': {
-            'handlers': ['console', 'console_json'],
+            'handlers': ['console_json', 'logstash'],
             'level': 'DEBUG',
             'propagate': True,
         },

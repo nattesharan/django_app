@@ -7,6 +7,7 @@ from home.forms import HomeForm
 import datetime
 # import logging module and get the logger
 import logging
+import json
 import structlog
 
 logger = logging.getLogger(__name__)
@@ -27,7 +28,16 @@ class HomeView(TemplateView):
         logger.error('this is error')
         logger.warning('this is warning')
         logger.critical('this is critical')
+        data = {
+            'event': 'test_event',
+            'data': {
+                'name': 'test',
+                'age': 20
+            },
+            'test': True
+        }
         event_logger.info('test_event', data={'name': 'test'}, age=22, test=True)
+        event_logger.debug(data)
         # users = User.objects.all()
         users = User.objects.exclude(pk=request.user.pk)
         friends = request.user.profile.friends.all()
