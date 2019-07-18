@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 # Create your views here.
 def home(request):
     numbers = [1,2,3,4,5]
@@ -41,10 +44,12 @@ def logout_user(request):
 
 def view_profile(request, pk=None):
     if pk:
+        logger.info('Viewing profile for {}'.format(pk))
         context = {
             'user': User.objects.get(pk=pk)
         }
     else:
+        logger.info('Viewing own profile')
         context = {
             'user': request.user,
             'last_visit': request.COOKIES.get('last_visit', datetime.datetime.utcnow()),
