@@ -7,13 +7,8 @@ from home.forms import HomeForm
 import datetime
 # import logging module and get the logger
 import logging
-import json
-# import structlog
-# from structlog import wrap_logger
-# logger = wrap_logger(logging.getLogger(__name__))
 
 logger = logging.getLogger(__name__)
-# event_logger = structlog.get_logger(__name__)
 # Create your views here.
 def home(request):
     return render(request, 'home/home.html')
@@ -24,7 +19,6 @@ class HomeView(TemplateView):
     def get(self, request):
         form = HomeForm()
         posts = Post.objects.all().order_by('-created_on')
-        # logger.bind(user_email=request.user.email, user_id=request.user.pk)
         logger.info('info_event',extra={
             'test_boolean': True,
             'test_dict': {'a': 1, 'b': 'c'},
