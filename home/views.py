@@ -8,10 +8,12 @@ import datetime
 # import logging module and get the logger
 import logging
 import json
-import structlog
+# import structlog
+# from structlog import wrap_logger
+# logger = wrap_logger(logging.getLogger(__name__))
 
 logger = logging.getLogger(__name__)
-event_logger = structlog.get_logger(__name__)
+# event_logger = structlog.get_logger(__name__)
 # Create your views here.
 def home(request):
     return render(request, 'home/home.html')
@@ -22,22 +24,39 @@ class HomeView(TemplateView):
     def get(self, request):
         form = HomeForm()
         posts = Post.objects.all().order_by('-created_on')
-        event_logger.bind(user_email=request.user.email, user_id=request.user.pk)
-        logger.debug('this is debug info')
-        logger.info('this is info info')
-        logger.error('this is error')
-        logger.warning('this is warning')
-        logger.critical('this is critical')
-        data = {
-            'event': 'test_event',
-            'data': {
-                'name': 'test',
-                'age': 20
-            },
-            'test': True
-        }
-        event_logger.info('test_event', data={'name': 'test'}, age=22, test=True)
-        event_logger.debug(data)
+        # logger.bind(user_email=request.user.email, user_id=request.user.pk)
+        logger.info('info_event',extra={
+            'test_boolean': True,
+            'test_dict': {'a': 1, 'b': 'c'},
+            'test_float': 1.23,
+            'test_integer': 123,
+            'test_list': [1, 2, 3],
+        })
+        # logger.critical('critical_event',extra={
+        #     'test_boolean': True,
+        #     'test_dict': {'a': 1, 'b': 'c'},
+        #     'test_float': 1.23,
+        #     'test_integer': 123,
+        #     'test_list': [1, 2, 3],
+        # })
+        # logger.debug('debug_event',extra={
+        #     'test_boolean': True,
+        #     'test_dict': {'a': 1, 'b': 'c'},
+        #     'test_float': 1.23,
+        #     'test_integer': 123,
+        #     'test_list': [1, 2, 3],
+        # })
+        # logger.error('error_event',extra={
+        #     'test_boolean': True,
+        #     'test_dict': {'a': 1, 'b': 'c'},
+        #     'test_float': 1.23,
+        #     'test_integer': 123,
+        #     'test_list': [1, 2, 3],
+        # })
+        try:
+            1/0
+        except Exception as E:
+            logger.exception('exception_event')
         # users = User.objects.all()
         users = User.objects.exclude(pk=request.user.pk)
         friends = request.user.profile.friends.all()

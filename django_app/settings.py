@@ -180,7 +180,7 @@ LOGGING = {
             'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
         },
         "json_formatter": {
-            "()": structlog.stdlib.ProcessorFormatter,
+            # "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.processors.JSONRenderer(),
         },
     },
