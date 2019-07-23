@@ -81,7 +81,6 @@ def change_password(request):
             # if we dont add this the usr will be logged out after changing password
             update_session_auth_hash(request, form.user)
             return redirect(reverse('accounts:view_profile'))
-        form = form
     else:
         form = PasswordChangeForm(user=request.user)
     return render(request, 'accounts/change_password.html', {'form': form})
