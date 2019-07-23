@@ -55,5 +55,3 @@ if __name__ == "__main__":
 # gunicorn django_app.wsgi:application --bind=0.0.0.0:8000 --log-level info --access-logfile django_app.log --error-logfile app_errors.log --pid django_app.pid
 
 # docker exec -it container_id python manage.py migrate
-
-# https://www.digitalocean.com/community/tutorials/how-to-ensure-code-quality-with-sonarqube-on-ubuntu-16-04

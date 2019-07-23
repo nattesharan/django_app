@@ -1,0 +1,71 @@
+Introduction
+
+Code quality is an approximation of how useful and maintainable a specific piece of code is. Quality code will make 
+the task of maintaining and expanding your application easier. It helps ensure that fewer bugs are introduced when you 
+make required changes in the future.
+
+SonarQube is an open-source tool that assists in code quality analysis and reporting. It scans your source code looking 
+for potential bugs, vulnerabilities, and maintainability issues, and then presents the results in a report which will 
+allow you to identify potential issues in your application.
+
+The SonarQube tool consists of two sub-applications: an analysis engine, which is installed locally on the developer's 
+machine, and a centralized server for record-keeping and reporting. A single SonarQube server instance can support multiple scanners, enabling you to centralize code quality reports from many developers in a single place.
+
+In this guide, you will deploy a SonarQube server and scanner to analyze your code and create code quality reports. 
+Then you'll perform a test on your machine by scanning it with the SonarQube tool.
+
+You can use the SonarQube server docker image for starting the sonarqube server
+just start the server like docker-compose -f sonarqube.yml
+
+This should start the sonarqube server on post 9000 of your host
+
+default username and password for logging in is admin
+
+Now create a project in sonarqube and get the project_key and token
+
+Now we need to also have sonarscanner which scans our code base
+
+SonarQube's code scanner is a separate package that you can install on a different machine than the one running the 
+SonarQube server, such as your local development workstation or a continuous delivery server. There are packages 
+available for Windows, MacOS, and Linux
+
+Start by creating a directory for the scanner and changing into the new directory:
+
+sudo mkdir /opt/sonarscanner
+cd /opt/sonarscanner
+
+Then download the SonarQube scanner for Linux using wget:
+sudo wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip
+
+Extract the scanner, then delete the zip archive file:
+
+sudo unzip sonar-scanner-cli-3.0.3.778-linux.zip
+sudo rm sonar-scanner-cli-3.0.3.778-linux.zip
+
+after that we can modify the properties of scanner
+sample properties
+
+#Configure here general information about the environment, such as SonarQube server connection details for example
+#No information about specific project should appear here
+
+#----- Default SonarQube server
+#sonar.host.url=http://localhost:9000
+
+#----- Default source code encoding
+#sonar.sourceEncoding=UTF-8
+#----- First, tell the scanner where it should submit the code analysis results.
+sonar.host.url=http://35.240.149.42:9000
+#----- What files to exclude from getting scanned
+sonar.exclusions=**/**/*.html,**/**/migrations/**
+
+Save and close the file. Now make the scanner binary executable:
+
+sudo chmod +x sonar-scanner-3.0.3.778-linux/bin/sonar-scanner
+
+Then create a symbolic link so that you can call the scanner without specifying the path:
+
+sudo ln -s /opt/sonarscanner/sonar-scanner-3.0.3.778-linux/bin/sonar-scanner /usr/local/bin/sonar-scanner
+
+Now that the scanner is set up, we're ready to run our first code scan.
+
+sonar-scanner  -Dsonar.projectKey=django_app -Dsonar.sources=. -Dsonar.login=77208f48bdbff3b1855ccfe3db2d24823e6596fe
