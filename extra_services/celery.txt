@@ -1,0 +1,4 @@
+To use celery we need a message broker and we can use message queues like redis rabbitmq etc.
+But I'm using redis and please follow the below url in order to set it up.
+
+https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04

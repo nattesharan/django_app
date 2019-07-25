@@ -259,3 +259,10 @@ PROJECT = 'personal-243717'
 TOPIC = 'hello_topic'
 SUBSCRIBER_1='subscription1'
 SUBSCRIBER_2='subscription2'
+
+# CELERY STUFF
+CELERY_BROKER_URL = 'redis://34.93.180.96:6379'
+CELERY_RESULT_BACKEND = 'redis://34.93.180.96:6379/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
