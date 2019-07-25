@@ -10,3 +10,4 @@ profile_images/
 *.log
 *.pid
 data/
+*.db

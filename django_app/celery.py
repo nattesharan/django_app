@@ -17,3 +17,5 @@ app.autodiscover_tasks()
 # celery -A django_app worker -l info
 #starting celery beat for periodic tasks
 # celery -A django_app beat -l info
+# to use db for configuring periodic tasks
+# celery -A django_app beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
