@@ -19,3 +19,12 @@ app.autodiscover_tasks()
 # celery -A django_app beat -l info
 # to use db for configuring periodic tasks
 # celery -A django_app beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
+# celery multi start django_app -A django_app --pidfile="%n.pid" --loglevel=info --logfile='django_app.log'
+# celery multi stop django_app -A django_app --pidfile="%n.pid" --loglevel=info --logfile='django_app.log'
+# celery multi restart django_app -A django_app --pidfile="%n.pid" --loglevel=info --logfile='django_app.log'
+
+
+# celery multi start django_app_beat -A django_app --beat -c 1 --pidfile="%n.pid" --loglevel=info logfile="django_beat.log" --scheduler=django_celery_beat.schedulers:DatabaseScheduler
+# celery multi stop django_app_beat -A django_app --beat -c 1 --pidfile="%n.pid" --loglevel=info logfile="django_beat.log" --scheduler=django_celery_beat.schedulers:DatabaseScheduler
+# celery multi restart django_app_beat -A django_app --beat -c 1 --pidfile="%n.pid" --loglevel=info logfile="django_beat.log" --scheduler=django_celery_beat.schedulers:DatabaseScheduler
