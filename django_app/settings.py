@@ -48,7 +48,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_extensions',
-    'django_filters'
+    'django_filters',
+    'django_celery_beat',
+    'django_celery_results'
 ]
 
 MIDDLEWARE = [
