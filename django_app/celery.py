@@ -15,3 +15,5 @@ app.autodiscover_tasks()
 
 # command to start celery 
 # celery -A django_app worker -l info
+#starting celery beat for periodic tasks
+# celery -A django_app beat -l info
