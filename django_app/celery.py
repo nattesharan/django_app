@@ -13,3 +13,5 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
 
+# command to start celery 
+# celery -A django_app worker -l info
