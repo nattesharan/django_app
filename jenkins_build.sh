@@ -17,7 +17,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 sudo sonar-scanner -Dsonar.projectKey=django_app -Dsonar.sources=. -Dsonar.login=77208f48bdbff3b1855ccfe3db2d24823e6596fe
 python manage.py migrate
-venv/bin/celery multi restart django_app -A django_app --pidfile="%n.pid" --loglevel=info --logfile='django_app.log'
-venv/bin/celery multi restart django_app_beat -A django_app --beat -c 1 --pidfile="%n.pid" --loglevel=info logfile="django_beat.log" --scheduler=django_celery_beat.schedulers:DatabaseScheduler
+venv/bin/celery multi start django_app -A django_app --pidfile="%n.pid" --loglevel=info --logfile='django_app.log'
+venv/bin/celery multi start django_app_beat -A django_app --beat -c 1 --pidfile="%n.pid" --loglevel=info logfile="django_beat.log" --scheduler=django_celery_beat.schedulers:DatabaseScheduler
 sudo supervisorctl restart django_app
 whoami
