@@ -150,6 +150,8 @@ ___________________________________________________________________________
             autostart=true
             autorestart=true
             redirect_stderr=True
+            stderr_logfile=/var/log/supervisor/django_app.err.log
+            stdout_logfile=/var/log/supervisor/django_app.out.log
             # env variables if any
             # environment=DJANGO_SETTINGS_MODULE="app.settings"
         4) All right! Now we will launch the following commands to start the settings previously made:
