@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'django_celery_beat',
-    'django_celery_results'
+    'django_celery_results',
+    'graphene_django'
 ]
 
 MIDDLEWARE = [
@@ -280,3 +281,8 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+# Graphene settings
+GRAPHENE = {
+    'SCHEMA': 'django_app.schema.schema'
+}

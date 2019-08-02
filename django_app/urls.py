@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.conf import settings
 from rest_framework_swagger.views import get_swagger_view
 from . import views
+
+from graphene_django.views import GraphQLView
 schema_view = get_swagger_view(title='API')
 
 urlpatterns = [
@@ -27,6 +29,7 @@ urlpatterns = [
     url(r'^home/', include('home.urls', namespace='home')),
     url(r'^api/v1/', include('api.urls', namespace='api')),
     url(r'^api/docs/', schema_view),
+    url(r'^graphapi/$', GraphQLView.as_view(graphiql=True)),
     # pubsub demo urls
     url(r'pubsub/$', views.publisher),
     url(r'pubsub/callback/$', views.pub_sub_callback)

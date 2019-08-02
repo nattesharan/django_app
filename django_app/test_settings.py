@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_extensions',
-    'django_filters'
+    'django_filters',
+    'graphene_django'
 ]
 
 MIDDLEWARE = [
@@ -200,3 +201,8 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+# Graphene settings
+GRAPHENE = {
+    'SCHEMA': 'django_app.schema.schema'
+}

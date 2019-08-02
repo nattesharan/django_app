@@ -13,6 +13,7 @@ django-haystack==2.8.1
 django-structlog==1.2.3
 elasticsearch==2.4.1
 google-cloud-pubsub==0.39.1
+graphene-django==2.4.0
 gunicorn==19.9.0
 locustio==0.11.0
 mysqlclient==1.4.2
