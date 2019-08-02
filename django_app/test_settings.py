@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'haystack',
     'accounts',
     'home',
     'api',
@@ -189,3 +190,12 @@ PROJECT = 'personal-243717'
 TOPIC = 'hello_topic'
 SUBSCRIBER_1='subscription1'
 SUBSCRIBER_2='subscription2'
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
+        'URL': 'http://35.240.149.42:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'

@@ -9,7 +9,9 @@ django-rest-swagger==2.2.0
 djangorestframework-simplejwt==4.3.0
 django-extensions==2.1.6
 django-filter==2.1.0
+django-haystack==2.8.1
 django-structlog==1.2.3
+elasticsearch==2.4.1
 google-cloud-pubsub==0.39.1
 gunicorn==19.9.0
 locustio==0.11.0

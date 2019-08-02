@@ -1,0 +1,28 @@
+Getting Started with Haystack
+Search is a topic of ever increasing importance. Users increasing rely on search to separate signal from noise and find 
+what they’re looking for quickly. In addition, search can provide insight into what things are popular (many searches), 
+what things are difficult to find on the site and ways you can improve the site.
+
+To this end, Haystack tries to make integrating custom search as easy as possible while being flexible/powerful enough to 
+handle more advanced use cases.
+
+Haystack also does pluggable backends (much like Django’s database layer), so virtually all of the code you write 
+ought to be portable between whichever search engine you choose.
+
+
+Handling Data
+
+Creating SearchIndexes
+
+SearchIndex objects are the way Haystack determines what data should be placed in the search index and handles the flow of
+data in. You can think of them as being similar to Django Models or Forms in that they are field-based and 
+manipulate/store data.
+
+You generally create a unique SearchIndex for each type of Model you wish to index, though you can reuse the same 
+SearchIndex between different models if you take care in doing so and your field names are very standardized.
+
+To build a SearchIndex, all that’s necessary is to subclass both indexes.SearchIndex & indexes.Indexable, define the 
+fields you want to store data with and define a get_model method.
+
+We’ll create the following NoteIndex to correspond to our Note model. This code generally goes in a search_indexes.py 
+file within the app it applies to, though that is not required. This allows Haystack to automatically pick it up. 
