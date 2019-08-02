@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
+from django.http.response import JsonResponse
 from home.models import Post
 from accounts.models import UserProfile
 from home.forms import HomeForm
 import datetime
+from rest_framework.views import APIView
+
+from haystack.query import SearchQuerySet
 # import logging module and get the logger
 import logging
 
@@ -96,3 +100,22 @@ def connect_friends(request, action, pk):
     else:
         UserProfile.remove_friend(user, friend_user)
     return redirect('home:home')
+
+class SearchApi(APIView):
+    """My custom search view."""
+    # https://django-haystack.readthedocs.io/en/master/searchqueryset_api.html more search query formats here
+    def get(self, request):
+        query = request.GET.get('query', None)
+        if query:
+            data = []
+            # search_result = SearchQuerySet().auto_query(query).models(Post)
+            search_result = SearchQuerySet().auto_query(query)
+            for result in search_result:
+                print("Calledddd")
+                data.append({
+                    'id': result.object.id,
+                    'post': result.object.post,
+                    'user': result.object.user.get_full_name()
+                })
+            return JsonResponse({'success': True, 'data': data})
+        return JsonResponse({'success': False}, status=400)
