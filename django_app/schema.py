@@ -35,7 +35,7 @@ class Query(graphene.ObjectType):
         return None
 
 class Mutation(graphene.ObjectType):
-    add_post = graphene.Field(PostType, post=graphene.String(), user=graphene.ID())
+    add_post = graphene.Field(PostType, post=graphene.String(required=True), user=graphene.ID())
 
     def resolve_add_post(self, info, **kwargs):
         post = kwargs.get('post')
