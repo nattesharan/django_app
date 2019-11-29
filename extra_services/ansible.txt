@@ -17,7 +17,7 @@ a package.
 Ansible works by connecting to remote hosts (using SSH) defined in inventory file, which contains information about 
 servers to be managed. Ansible then executes defined modules or tasks inside a playbook. 
 Execution of playbook which is called the play. We can also use predefined organised playbook called roles, 
-which are used for sharing and reusing a provisioning
+which are used for sharing and reusing a provisioning.
 
 Terminology used in Ansible:
 
