@@ -20,6 +20,7 @@ Execution of playbook which is called the play. We can also use predefined organ
 which are used for sharing and reusing a provisioning
 
 Terminology which is used in Ansible:
+_________________________________________
 
 Controller Machine: Machine where Ansible is installed
 Inventory: Information regarding servers to be managed
