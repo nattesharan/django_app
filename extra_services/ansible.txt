@@ -19,7 +19,7 @@ servers to be managed. Ansible then executes defined modules or tasks inside a p
 Execution of playbook which is called the play. We can also use predefined organised playbook called roles, 
 which are used for sharing and reusing a provisioning
 
-Terminology used in Ansible:
+Terminology which is used in Ansible:
 
 Controller Machine: Machine where Ansible is installed
 Inventory: Information regarding servers to be managed
