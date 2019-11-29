@@ -1,0 +1,35 @@
+Ansible does configuration management, application deployment, along with infrastructure orchestration.
+In ansible, we define what we want to do and ansible go through each and every step for that.
+
+
+Once upon a time, managing servers reliably and efficiently was a challenge. 
+System administrators managed server by hand, installing software manually, changing configuration and managing services 
+on servers. As managed servers grew and managed services become more complex, scaling manual process was time-consuming 
+and hard. Then came Ansible which is helpful in creating the group of machines, define how to configure them, what action 
+to be taken on them. All these configurations and actions can be triggered from a central location which can be your 
+local system (named controller machine).
+
+Ansible uses SSH to connect to remote hosts and do the setup, no software needed to be installed beforehand on a remote 
+host. It’s simple, agentless, powerful and flexible. It uses YAML in form of ansible playbook. 
+Playbook is a file where automation is defined through tasks. A task is a single step to be performed like installing 
+a package.
+
+Ansible works by connecting to remote hosts (using SSH) defined in inventory file, which contains information about 
+servers to be managed. Ansible then executes defined modules or tasks inside a playbook. 
+Execution of playbook which is called the play. We can also use predefined organised playbook called roles, 
+which are used for sharing and reusing a provisioning.
+
+Terminology used in Ansible:
+
+Controller Machine: Machine where Ansible is installed
+Inventory: Information regarding servers to be managed
+Playbook: Automation is defined using tasks defined in YAML format
+Task: Procedure to be executed
+Module: Predefined commands executed directly on remote hosts
+Play: Execution of a playbook
+Role: a Pre-defined way for organizing playbooks
+Handlers: Tasks with unique names that will only be executed if notified by another task
+
+
+Each playbook is composed of one or more ‘plays’ in a list.
+
