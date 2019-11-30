@@ -34,3 +34,6 @@ Handlers: Tasks with unique names that will only be executed if notified by anot
 
 Each playbook is composed of one or more ‘plays’ in a list.
 
+
+ansible-playbook --inventory-file=hosts playbook.yaml
+

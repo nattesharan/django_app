@@ -1,5 +1,7 @@
 - name: "Simple Playbook"
   hosts: servers
+  vars:
+    echo_line: Hello World! Everything is great....
   tasks:
     - name: Simple Echo Hello world
-      shell: echo line one
+      shell: echo "{{ echo_line }}"
