@@ -4,7 +4,7 @@
     echo_line: Hello World! Everything is great....
   tasks:
     - name: run apt-get update
-      become: true
+      become: yes
       apt:
         upgrade: yes
     - name: simple echo

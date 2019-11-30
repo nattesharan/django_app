@@ -37,3 +37,4 @@ Each playbook is composed of one or more ‘plays’ in a list.
 
 ansible-playbook --inventory-file=hosts playbook.yaml
 
+https://docs.ansible.com/ansible/latest/modules/modules_by_category.html

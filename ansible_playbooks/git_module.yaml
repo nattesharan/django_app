@@ -1,0 +1,19 @@
+- name: Simple Playbook for pulling git repository
+  hosts: servers
+  tasks:
+    - name: creating source directory
+      file:
+        path: code
+        state: directory
+        recurse: yes
+    - name: Change permissions
+      file:
+        path: code
+        mode: 0777
+        state: directory
+    - name: cloning repo
+      git:
+        repo: git@github.com:nattesharan/django_app.git
+        dest: code
+        accept_hostkey: yes
+        force: yes
