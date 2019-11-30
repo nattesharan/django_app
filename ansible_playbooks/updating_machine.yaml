@@ -1,0 +1,23 @@
+- name: "Simple task for updating machine"
+  hosts: servers
+  vars:
+    echo_line: Hello World! Everything is great....
+  tasks:
+    - name: run apt-get update
+      become: true
+      apt:
+        upgrade: yes
+    - name: simple echo
+      shell: echo Its doneeeee....
+      notify:
+        - update completed
+        - create dir
+  handlers:
+    - name: update completed
+      shell: echo "{{ echo_line }}"
+      listen: update completed
+    - name: create dir
+      listen: create dir
+      file:
+        path: test
+        state: directory
