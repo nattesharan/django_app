@@ -1,0 +1,5 @@
+- name: "Simple Playbook"
+  hosts: servers
+  tasks:
+    - name: Simple Echo Hello world
+      shell: echo line one

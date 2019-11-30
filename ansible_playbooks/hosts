@@ -1,0 +1,2 @@
+[servers]
+ansible_client_1 ansible_ssh_host=34.67.164.228 ansible_user=nattesharan
