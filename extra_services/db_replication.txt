@@ -159,3 +159,10 @@ __________________________________________
 
         SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1; SLAVE START; 
 
+To be more secure make sure the slaves have users which dont have write access and only have read access
+
+Checkout Master-Master replication....
+    https://www.digitalocean.com/community/tutorials/how-to-set-up-mysql-master-master-replication
+
+Steup load balancing for multiple mysql servers refer the below url
+    https://www.digitalocean.com/community/tutorials/how-to-use-haproxy-to-set-up-mysql-load-balancing--3
