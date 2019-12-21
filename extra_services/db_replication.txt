@@ -1,0 +1,161 @@
+MySQL replication is a process that enables data from one MySQL database server (the master) to be copied automatically 
+to one or more MySQL database servers (the slaves). It is usually used to spread read access on multiple servers for 
+scalability, although it can also be used for other purposes such as for failover, or analyzing data on the slave in 
+order not to overload the master.
+
+
+As the master-slave replication is a one-way replication (from master to slave), only the master database is used for the 
+write operations, while read operations may be spread on multiple slave databases. What this means is that if 
+master-slave replication is used as the scale-out solution, you need to have at least two data sources defined,
+one for write operations and the second for read operations.
+
+This tutorial will cover a very simple example of mysql replication—one master will send information to a single slave. 
+For the process to work you will need two IP addresses: one of the master server and and one of the slave.
+
+
+Steps to install mysql
+_________________________
+1) Login to the vm and then do the commands
+    sudo apt-get update
+    sudo apt-get install mysql-server
+2)It will then prompt you to setup a password for the root user
+3) You can enter the password of your favour AND THEN make sure you remember it so that you can login with that user
+for further steps...
+4) Once mysql is installed make sure you are able to login the mysql shell using 
+    mysql -u root -p
+    Enter teh password and you should be able to login to the mysql shell
+Steps:
+_____________________
+
+1) First I've created a couple of instances in GCP one for master and onde for slave
+2) Install mysql on both the servers and then check the next steps...Please refer the above section for installing 
+mysql
+3) Configure the Master Database
+   __________________________________________
+
+   Open up the mysql configuration file on the master server.
+
+   sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
+
+   Once inside that file, we need to make a few changes.
+
+    The first step is to find the section that looks like this, binding the server to the local host:
+
+    replace the bind address to 0.0.0.0
+
+    The next configuration change refers to the server-id, located in the [mysqld] section. You can choose any number for this 
+    spot (it may just be easier to start with 1), but the number must be unique and cannot match any other server-id in your replication group. 
+    I’m going to go ahead and call this one 1.
+
+    server-id = 1
+
+    Move on to the log_bin line. This is where the real details of the replication are kept. 
+    The slave is going to copy all of the changes that are registered in the log. For this step we simply need to uncomment the line that refers to log_bin:
+
+    log_bin                 = /var/log/mysql/mysql-bin.log
+
+    Finally, we need to designate the database that will be replicated on the slave server.
+    You can include more than one database by repeating this line for all of the databases you will need.
+
+    binlog_do_db            = testdatabase
+
+    After you make all of the changes, go ahead and save and exit out of the configuration file.
+
+
+    Once you make these changes you should be able to access mysql from your local also you can test it with mysql -u root -h **.***.***.** -p
+    this should prompt you enter the password and upon entering the password it should login to the master database although its not recommeneded to do soo.. it just to test whether our db 
+    is accessable with  the ip address.(Make sure you open 3306 port of the instance :))
+
+    Create a database named testdatabase
+        create database testdatabase
+
+    Create example table students
+        create table students(name VARCHAR(100),age INT);
+
+    Insert sample data into database
+        insert into students values('user1',21);
+    
+    We need to grant privileges to the slave. You can use this line to name your slave and set up their password. The command should be in this format:
+        GRANT REPLICATION SLAVE ON *.* TO 'slave_user'@'%' IDENTIFIED BY 'slave_user';
+        FLUSH PRIVILEGES;
+
+    The next part is a bit finicky. To accomplish the task you will need to open a new window or tab in addition to the one that you are already using a few steps down the line.
+    Login to the mysql shell with the root user
+        USE newdatabase;
+
+        Following that, lock the database to prevent any new changes:
+            FLUSH TABLES WITH READ LOCK;
+        Then type 
+            SHOW MASTER STATUS;
+        Then you should see sometghing like 
+
+        mysql> SHOW MASTER STATUS;
+                +------------------+----------+--------------+------------------+
+                | File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
+                +------------------+----------+--------------+------------------+
+                | mysql-bin.000001 |     1731 | testdatabase |                  |
+                +------------------+----------+--------------+------------------+
+                1 row in set (0.00 sec)
+        
+        This is the position from which the slave database will start replicating. Record these numbers, they will come in useful later.
+
+        If you make any new changes in the same window, the database will automatically unlock. For this reason, you should open the new tab or window and continue with the next steps 
+        there.
+
+        Proceeding the with the database still locked, export your database using mysqldump in the new window (make sure you are typing this command in the bash shell, not in MySQL).
+
+        mysqldump -u root -p --opt testdatabase > testdatabase.sql
+
+        Now, returning to your your original window, unlock the databases (making them writeable again). Finish up by exiting the shell.
+
+            UNLOCK TABLES;
+            QUIT;
+
+4) Configuring the slave database
+__________________________________________
+
+    Install mysql in the slave server
+
+    Import the database that you previously exported from the master database and restore the database in slave
+
+        mysql -u root -p testdatabase < /path/to/testdatabase.sql
+
+    Now we need to configure the slave configuration in the same way as we did the master:
+        sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
+
+    We have to make sure that we have a few things set up in this configuration. The first is the server-id. This number, as mentioned before needs to be unique. 
+    Since it is set on the default (still 1), be sure to change it’s something different.
+
+        server-id               = 2
+    
+    Following that, make sure that your have the following three criteria appropriately filled out:
+
+        relay-log               = /var/log/mysql/mysql-relay-bin.log
+        log_bin                 = /var/log/mysql/mysql-bin.log
+        binlog_do_db            = testdatabase
+    You will need to add in the relay-log line: it is not there by default. Once you have made all of the necessary changes, save and exit out of the slave configuration file.
+
+    Restart MySQL once again:
+
+        sudo service mysql restart
+    
+    The next step is to enable the replication from within the MySQL shell.
+    Open up the the MySQL shell once again and type in the following details, replacing the values to match your information:
+
+        CHANGE MASTER TO MASTER_HOST='35.200.193.26',MASTER_USER='slave_user', MASTER_PASSWORD='slave_user', MASTER_LOG_FILE='mysql-bin.000001', MASTER_LOG_POS=  1731;
+
+        This command accomplishes several things at the same time:
+
+            1. It designates the current server as the slave of our master server.
+            2. It provides the server the correct login credentials
+            3. Last of all, it lets the slave server know where to start replicating from; the master log file and log position come from the numbers we wrote down previously.
+    
+    With that—you have configured a master and slave server.
+
+    Activate the slave server:
+
+        START SLAVE;
+    If there is an issue in connecting, you can try starting slave with a command to skip over it:
+
+        SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1; SLAVE START; 
+
